@@ -1,12 +1,13 @@
-/** @type {import('tailwindcss').Config} */
-export default {
-  content: ['./index.html', './src/**/*.{js,jsx}'],
-  // tailwind.config.js
+// tailwind.config.js
+import { defineConfig } from 'tailwindcss/helpers';
+
+export default defineConfig({
   theme: {
     extend: {
       fontFamily: {
-        instrument: ['Instrument Serif', 'serif'],
+        instrument: ['"instrument-serif"', 'sans-serif'],
       },
     },
   },
-};
+  content: ['./index.html', './src/**/*.{js,jsx,ts,tsx}'],
+});

@@ -1,110 +1,119 @@
-import InputField from "../../components/common/Input/InputField";
-import Button from "../../components/common/Button/Button";
-
+import { useState } from 'react';
+import InputField from '../../components/common/Input/InputField';
+import Button from '../../components/common/Button/Button';
+import useSignup from '../../hooks/useSignup';
+import FormContainer from '../../components/common/FormContainer/FormContainer';
+import AvatarGroup from '../../components/common/AvatarGroup/AvatarGroup';
 const Signup = () => {
+  const [formData, setFormData] = useState({
+    username: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+  });
+
+  const { signup, loading, errors } = useSignup();
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    await signup(formData);
+  };
+
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-white px-4">
-      {/* Top avatars and count */}
-      <div className="text-center mb-4">
-        <div className="flex justify-center -space-x-2 mb-2">
-          {[...Array(5)].map((_, i) => (
-            <div
-              key={i}
-              className="w-6 h-6 rounded-full bg-gray-400 border-2 border-white"
-            ></div>
-          ))}
-        </div>
-        <p
-          className="text-[#8e9ab0] text-sm italic"
-          style={{ fontFamily: "instrument-serif, sans-serif" }}
-        >
+    <FormContainer
+      title="Sign up & create your profile."
+      subtitle={
+        <>
+          <AvatarGroup />
           Join 118,044+ peers.
-        </p>
-      </div>
-
-      {/* Headings */}
-      <div className="text-center mb-6">
-        <h1
-          className="text-2xl sm:text-3xl text-black font-serif"
-          style={{
-            fontFamily: "instrument-serif, sans-serif",
-            whiteSpace: "nowrap",
-          }}
-        >
-          Sign up & create your profile.
-        </h1>
-      </div>
-
-      {/* Form container */}
-      <div className="bg-white w-full max-w-md rounded-2xl shadow-md px-6 py-8 border border-gray-300">
-        {/* Username Field  */}
+        </>
+      }
+      bottomText={
+        <>
+          Already have a profile?{' '}
+          <a
+            href="/login"
+            className="text-[#4e5b84] font-semibold hover:underline"
+          >
+            Log in
+          </a>
+        </>
+      }
+    >
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white w-full max-w-md rounded-2xl shadow-md px-6 py-8 border border-gray-300"
+      >
         <InputField
           label="Username"
-          type="text"
           name="username"
+          value={formData.username}
+          onChange={handleChange}
           placeholder="Your username"
+          error={errors.username}
         />
-        {/* Email Field */}
         <InputField
           label="Email"
           type="email"
           name="email"
+          value={formData.email}
+          onChange={handleChange}
           placeholder="you@youremail.com"
+          error={errors.email}
         />
-
-        {/* Password Field */}
         <InputField
           label="Password"
           type="password"
           name="password"
-          placeholder="At least 8 characters."
+          value={formData.password}
+          onChange={handleChange}
+          placeholder="At least 8 characters"
+          error={errors.password}
         />
-        {/* Confirm Password Field */}
         <InputField
           label="Confirm Password"
           type="password"
-          name="password"
-          placeholder="At least 8 characters."
+          name="confirmPassword"
+          value={formData.confirmPassword}
+          onChange={handleChange}
+          placeholder="At least 8 characters"
+          error={errors.confirmPassword}
         />
 
-        {/* Create Profile Button */}
+        {errors.server && (
+          <p className="text-red-500 text-sm text-center mt-2">
+            {errors.server}
+          </p>
+        )}
+
         <Button
-          text="Create Profile"
+          text={loading ? 'Creating...' : 'Create Profile'}
           type="submit"
           color="bg-[#0d1128]"
-          className="w-full font-semibold mt-2 flex items-center justify-center gap-1"
-          textColor="text-white"
+          className="w-full font-semibold mt-2"
         />
 
-        {/* Terms Notice */}
         <p className="text-xs text-center text-gray-400 mt-4">
-          By clicking "Create Profile" you agree to our{" "}
+          By clicking "Create Profile" you agree to our{' '}
           <a href="#" className="underline hover:text-gray-600">
             Code of Conduct
           </a>
-          ,{" "}
+          ,{' '}
           <a href="#" className="underline hover:text-gray-600">
             Terms of Service
           </a>
-          , and{" "}
+          , and{' '}
           <a href="#" className="underline hover:text-gray-600">
             Privacy Policy
           </a>
           .
         </p>
-      </div>
-
-      {/* Bottom Link */}
-      <p className="mt-6 text-sm text-gray-500">
-        Already have a profile?{" "}
-        <a
-          href="/login"
-          className="text-[#4e5b84] font-semibold hover:underline"
-        >
-          Log in
-        </a>
-      </p>
-    </div>
+      </form>
+    </FormContainer>
   );
 };
 

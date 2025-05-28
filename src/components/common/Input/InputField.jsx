@@ -1,26 +1,29 @@
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
 
 const InputField = ({
   label,
   value,
   onChange,
   placeholder,
-  type = "text",
+  type = 'text',
   name,
-  as = "input",
+  as = 'input',
   rows = 3,
-  className = "",
+  className = '',
   prefix,
   addonRight,
+  error,
 }) => {
   return (
     <div className="flex flex-col gap-1 mb-3">
       {label && <label className="text-sm font-medium">{label}</label>}
 
-      <div className="flex items-center border border-solid border-gray-300 rounded-xl p-2 focus-within:ring-2 focus-within:ring-gray-200">
+      <div
+        className={`flex items-center border rounded-xl p-2 focus-within:ring-2 ${error ? 'border-red-500 ring-red-200' : 'border-gray-300 focus-within:ring-gray-200'}`}
+      >
         {prefix && <div className="mr-2">{prefix}</div>}
 
-        {as === "textarea" ? (
+        {as === 'textarea' ? (
           <textarea
             name={name}
             value={value}
@@ -42,6 +45,8 @@ const InputField = ({
 
         {addonRight && <div className="ml-2">{addonRight}</div>}
       </div>
+
+      {error && <p className="text-sm text-red-500 mt-1">{error}</p>}
     </div>
   );
 };
@@ -58,6 +63,7 @@ InputField.propTypes = {
   className: PropTypes.string,
   prefix: PropTypes.node,
   addonRight: PropTypes.node,
+  error: PropTypes.string,
 };
 
 export default InputField;

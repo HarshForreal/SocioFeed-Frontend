@@ -1,9 +1,9 @@
-import React, { useState } from "react";
-import { ArrowRight } from "lucide-react";
-import Button from "../common/Button/Button";
-import InputField from "../common/Input/InputField";
+import React, { useState } from 'react';
+import { ArrowRight } from 'lucide-react';
+import Button from '../common/Button/Button';
+import InputField from '../common/Input/InputField';
 const UsernameInput = () => {
-  const [username, setUsername] = useState("");
+  const [username, setUsername] = useState('');
 
   return (
     <div className="max-w-xl px-4 mx-auto mt-12">
@@ -16,15 +16,15 @@ const UsernameInput = () => {
             <img
               src="/logo.png"
               alt="logo"
-              style={{ height: "35px", width: "35px" }}
+              style={{ height: '35px', width: '35px' }}
             />
-            <span className="text-black">sociofeed.io/</span>
+            <span className="text-black font-bold">sociofeed.io/</span>
           </div>
         }
         addonRight={
           <Button
-            onClick={() => console.log("Searching", username)}
-            className="p-2"
+            onClick={() => console.log('Searching', username)}
+            className="p-2 rounded-xl"
             color="bg-gray-400"
             textColor="text-white"
             text={<ArrowRight className="w-5 h-5" />}
