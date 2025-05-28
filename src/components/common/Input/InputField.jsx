@@ -1,0 +1,63 @@
+import PropTypes from "prop-types";
+
+const InputField = ({
+  label,
+  value,
+  onChange,
+  placeholder,
+  type = "text",
+  name,
+  as = "input",
+  rows = 3,
+  className = "",
+  prefix,
+  addonRight,
+}) => {
+  return (
+    <div className="flex flex-col gap-1 mb-3">
+      {label && <label className="text-sm font-medium">{label}</label>}
+
+      <div className="flex items-center border border-solid border-gray-300 rounded-xl p-2 focus-within:ring-2 focus-within:ring-gray-200">
+        {prefix && <div className="mr-2">{prefix}</div>}
+
+        {as === "textarea" ? (
+          <textarea
+            name={name}
+            value={value}
+            onChange={onChange}
+            placeholder={placeholder}
+            rows={rows}
+            className={`flex-1 outline-none ${className}`}
+          />
+        ) : (
+          <input
+            type={type}
+            name={name}
+            value={value}
+            onChange={onChange}
+            placeholder={placeholder}
+            className={`flex-1 outline-none ${className}`}
+          />
+        )}
+
+        {addonRight && <div className="ml-2">{addonRight}</div>}
+      </div>
+    </div>
+  );
+};
+
+InputField.propTypes = {
+  label: PropTypes.string,
+  value: PropTypes.string,
+  onChange: PropTypes.func,
+  placeholder: PropTypes.string,
+  type: PropTypes.string,
+  name: PropTypes.string,
+  as: PropTypes.string,
+  rows: PropTypes.number,
+  className: PropTypes.string,
+  prefix: PropTypes.node,
+  addonRight: PropTypes.node,
+};
+
+export default InputField;
