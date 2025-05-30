@@ -1,4 +1,3 @@
-// components/common/AvatarGroup.jsx
 const AvatarGroup = ({ count = 5 }) => (
   <div className="flex justify-center -space-x-2 mb-2">
     {[...Array(count)].map((_, i) => (

@@ -22,15 +22,21 @@
     "@emotion/styled": "^11.14.0",
     "@fontsource/instrument-serif": "^5.2.5",
     "@fontsource/inter": "^5.2.5",
+    "@hookform/resolvers": "^5.0.1",
     "@mui/material": "^7.1.0",
+    "@reduxjs/toolkit": "^2.8.2",
     "@tailwindcss/vite": "^4.1.7",
     "axios": "^1.9.0",
     "lucide-react": "^0.511.0",
     "prop-types": "^15.8.1",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "react-hook-form": "^7.56.4",
+    "react-redux": "^9.2.0",
     "react-router-dom": "^7.6.1",
-    "tailwindcss": "^4.1.7"
+    "tailwind-scrollbar-hide": "^2.0.0",
+    "tailwindcss": "^4.1.7",
+    "yup": "^1.6.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.25.0",
