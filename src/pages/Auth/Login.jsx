@@ -4,7 +4,6 @@ import Button from '../../components/common/Button/Button';
 import Form from '../../components/common/Form/Form';
 import { ArrowRight } from 'lucide-react';
 import useLogin from '../../hooks/useLogin';
-
 const Login = () => {
   const [formData, setFormData] = useState({
     email: '',

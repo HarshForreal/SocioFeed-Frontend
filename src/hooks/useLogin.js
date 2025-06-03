@@ -1,9 +1,13 @@
+import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
-import { loginUser } from '../api/auth/auth';
+import { loginUser } from '../api/auth';
 import { handleApiError } from '../utils/handleApiError';
-import { setUser, setIsLoggedIn } from '../store/slices/authSlice';
+import {
+  setUser,
+  setIsLoggedIn,
+  verifySession,
+} from '../store/slices/authSlice';
 
 const useLogin = () => {
   const [loading, setLoading] = useState(false);
@@ -17,18 +21,18 @@ const useLogin = () => {
       setLoading(true);
       const res = await loginUser({ usernameOrEmail: email, password });
       console.log('✅ Login API success:', res.data);
-
-      // ✅ Dispatch Redux updates
+      const token = res.data.token;
+      localStorage.setItem('token', token);
+      // Immediately update Redux state with user and login status
       dispatch(setUser(res.data.user));
       dispatch(setIsLoggedIn(true));
-
-      console.log('📦 setUser dispatched:', res.data.user);
-      console.log('📦 setIsLoggedIn dispatched: true');
-
+      console.log('📦 setUser and setIsLoggedIn dispatched');
+      dispatch(verifySession());
       navigate('/dashboard');
     } catch (err) {
       const msg = handleApiError(err, 'Login Failed, Something went wrong');
       setErrors({ server: msg });
+      console.error('❌ Login error:', err);
     } finally {
       setLoading(false);
     }

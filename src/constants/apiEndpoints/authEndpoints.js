@@ -1,4 +1,4 @@
-export const apiEndpoints = {
+const authEndpoints = {
   REGISTER: '/auth/register',
   LOGIN: '/auth/login',
   ACTIVATE: '/auth/activate',
@@ -8,3 +8,5 @@ export const apiEndpoints = {
   LOGOUT: '/auth/logout',
   VERIFY: '/auth/verify',
 };
+
+export default authEndpoints;

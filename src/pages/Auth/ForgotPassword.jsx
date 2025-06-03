@@ -2,7 +2,7 @@ import { useState } from 'react';
 import InputField from '../../components/common/Input/InputField';
 import Button from '../../components/common/Button/Button';
 import FormContainer from '../../components/common/FormContainer/FormContainer';
-import { requestPasswordReset } from '../../api/auth/auth';
+import { requestPasswordReset } from '../../api/auth';
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState('');

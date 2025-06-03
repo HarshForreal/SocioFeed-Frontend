@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import InputField from '../../components/common/Input/InputField';
 import Button from '../../components/common/Button/Button';
 import FormContainer from '../../components/common/FormContainer/FormContainer';
-import { resetPassword } from '../../api/auth/auth';
+import { resetPassword } from '../../api/auth';
 
 const ResetPassword = () => {
   const { token } = useParams();

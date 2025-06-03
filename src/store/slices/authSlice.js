@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { verifyUser } from '../../api/auth/auth';
+import { verifyUser } from '../../api/auth';
 export const verifySession = createAsyncThunk(
   'auth/verifySession',
   async (_, { rejectWithValue }) => {
