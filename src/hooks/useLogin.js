@@ -26,13 +26,11 @@ const useLogin = () => {
       // Immediately update Redux state with user and login status
       dispatch(setUser(res.data.user));
       dispatch(setIsLoggedIn(true));
-      console.log('📦 setUser and setIsLoggedIn dispatched');
       dispatch(verifySession());
       navigate('/dashboard');
     } catch (err) {
       const msg = handleApiError(err, 'Login Failed, Something went wrong');
       setErrors({ server: msg });
-      console.error('❌ Login error:', err);
     } finally {
       setLoading(false);
     }

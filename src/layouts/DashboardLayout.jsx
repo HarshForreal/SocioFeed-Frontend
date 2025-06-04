@@ -7,19 +7,23 @@ const DashboardLayout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="flex min-h-screen">
-      <LeftSidebar
-        isOpen={sidebarOpen}
-        onClose={() => setSidebarOpen(false)}
-        user={{
-          name: 'Harsh',
-          profileImage: 'https://yourcdn.com/user.jpg',
-          followers: 6,
-          following: 9,
-        }}
-      />
+    <div className="relative min-h-screen">
+      {/* Sidebar fixed on left, full height, scrollable if needed */}
+      <div
+        className={`fixed top-0 left-0 h-screen w-64 bg-white shadow-lg overflow-y-auto
+          ${sidebarOpen ? 'block' : 'hidden'} md:block`}
+      >
+        <LeftSidebar
+          isOpen={sidebarOpen}
+          onClose={() => setSidebarOpen(false)}
+        />
+      </div>
 
-      <div className="flex-1 flex flex-col">
+      {/* Main content: add left margin equal to sidebar width */}
+      <div
+        className="ml-0 md:ml-64 flex flex-col h-screen overflow-y-auto"
+        style={{ paddingTop: '64px' }} // Adjust if you have a fixed header of height 64px
+      >
         {/* Mobile Top Bar */}
         <div className="fixed top-0 left-0 right-0 z-20 flex items-center justify-between bg-white px-4 py-2 shadow md:hidden">
           <button onClick={() => setSidebarOpen(true)}>
@@ -28,8 +32,8 @@ const DashboardLayout = () => {
           <img src="/logo.png" alt="Logo" className="h-8" />
         </div>
 
-        {/* Main content */}
-        <main className="flex-1 pt-16 md:pt-0 px-4 py-4">
+        {/* Main content area */}
+        <main className="flex-1 px-4 py-4">
           <Outlet />
         </main>
       </div>

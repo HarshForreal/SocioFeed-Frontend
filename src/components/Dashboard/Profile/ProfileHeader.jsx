@@ -6,7 +6,7 @@ const ProfileHeader = ({ user, onFollowersClick, onFollowingClick }) => {
       <img
         src={user.avatarUrl || user.profileUrl}
         alt={user.username}
-        className="mx-auto h-24 w-24 rounded-full object-cover border"
+        className="mx-auto h-24 w-24 rounded-full object-cover"
       />
       <h1 className="text-2xl font-semibold mt-2 flex items-center justify-center gap-2">
         {user.username}
