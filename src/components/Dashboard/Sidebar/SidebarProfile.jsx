@@ -1,5 +1,5 @@
 const SidebarProfile = ({ name, profileImage, followers, following }) => (
-  <div className="flex items-center gap-3 px-4 pb-4 mt-auto">
+  <div className="flex items-center gap-3 pb-2 mt-auto">
     <img
       src={profileImage}
       alt={name}

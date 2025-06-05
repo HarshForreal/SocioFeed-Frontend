@@ -6,6 +6,7 @@ import Post from '../../components/Post/Post';
 import PostUploadModal from '../../components/Post/PostUploadModal';
 import { fetchUserProfile } from '../../store/slices/userSlice';
 import { fetchUserPosts } from '../../store/slices/postsSlice';
+import { uploadAndCreatePost } from '../../store/slices/postsSlice';
 import api from '../../api/client';
 const ProfilePage = () => {
   const dispatch = useDispatch();
@@ -19,7 +20,6 @@ const ProfilePage = () => {
     // error: postsError,
   } = useSelector((state) => state.posts);
 
-  console.log('ProfilePage Posts:', posts);
   const [modalOpen, setModalOpen] = useState(false);
   const [modalTitle, setModalTitle] = useState('');
   const [modalList, setModalList] = useState([]);
@@ -33,7 +33,6 @@ const ProfilePage = () => {
 
   useEffect(() => {
     if (userId) {
-      console.log('Fetching posts for userId:', userId);
       dispatch(fetchUserPosts({ userId }));
     }
   }, [dispatch, userId]);
@@ -54,8 +53,17 @@ const ProfilePage = () => {
     }
   };
 
-  const handlePostSubmit = async ({ images, caption }) => {
-    console.log('Uploading Image', images, caption);
+  const handlePostSubmit = (postData) => {
+    // Dispatch the action to upload image and create a post
+    dispatch(uploadAndCreatePost(postData))
+      .then(() => {
+        // Success: close the modal
+        setModalOpen(false);
+      })
+      .catch((err) => {
+        // Handle error if post creation fails
+        console.error('Post upload failed:', err);
+      });
   };
 
   if (loading) return <div>Loading profile...</div>;
@@ -85,7 +93,6 @@ const ProfilePage = () => {
         {posts.length === 0 && !postsLoading && <p>No posts to display.</p>}
 
         {posts.map((post) => {
-          console.log('inside map function Post id', post.id); // This should now work
           return <Post key={post.id} post={post} />;
         })}
       </div>
@@ -125,7 +132,6 @@ const ProfilePage = () => {
         )}
       </Modal>
 
-      {/* Post Upload Modal */}
       <PostUploadModal
         isOpen={uploadOpen}
         onClose={() => setUploadOpen(false)}

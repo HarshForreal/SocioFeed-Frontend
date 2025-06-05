@@ -18,15 +18,13 @@ const EditProfileModal = ({ currentUser, onClose, onUpdate }) => {
   });
   const [uploading, setUploading] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState(currentUser.avatarUrl || null);
-  const [userUpdated, setUserUpdated] = useState(false);
+  const [croppedAvatarBlob, setCroppedAvatarBlob] = useState(null);
 
-  // Animation effect - similar to your original
   useEffect(() => {
     setIsVisible(true);
     return () => setIsVisible(false);
   }, []);
 
-  // Reset form data when component mounts with new user data
   useEffect(() => {
     if (currentUser) {
       setFormData({
@@ -34,7 +32,6 @@ const EditProfileModal = ({ currentUser, onClose, onUpdate }) => {
         bio: currentUser.bio || '',
       });
       setAvatarUrl(currentUser.avatarUrl || null);
-      setUserUpdated(false);
     }
   }, [currentUser]);
 
@@ -45,22 +42,34 @@ const EditProfileModal = ({ currentUser, onClose, onUpdate }) => {
     }));
   };
 
-  const handleAvatarUpload = async (croppedBlob) => {
+  // Upload avatar to server
+  const uploadAvatarToServer = async () => {
+    console.log('[Avatar Upload] Preparing to upload...');
+    if (!croppedAvatarBlob) return;
+
     try {
       setUploading(true);
       const formDataObj = new FormData();
-      formDataObj.append('avatar', croppedBlob, 'avatar.jpg');
+      formDataObj.append('avatar', croppedAvatarBlob, 'avatar.jpg');
 
+      console.log('[Avatar Upload] Uploading avatar...');
       const res = await uploadAvatar(formDataObj, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
 
-      setAvatarUrl(res.data.url);
-      setUserUpdated(true);
+      const newAvatarUrl = res.data.url;
+      const timestamp = new Date().getTime();
+      const avatarUrlWithTimestamp = `${newAvatarUrl}?t=${timestamp}`;
+
+      console.log('[Avatar Upload] Upload successful:', avatarUrlWithTimestamp);
+      setAvatarUrl(avatarUrlWithTimestamp);
+      setCroppedAvatarBlob(null);
       toast.success('Avatar uploaded successfully!');
+      return avatarUrlWithTimestamp;
     } catch (err) {
+      console.error('[Avatar Upload] Failed:', err);
       toast.error('Failed to upload avatar');
-      console.error(err);
+      setAvatarUrl(currentUser.avatarUrl || null);
     } finally {
       setUploading(false);
     }
@@ -68,19 +77,31 @@ const EditProfileModal = ({ currentUser, onClose, onUpdate }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log('[Submit] Form submit triggered');
 
     try {
+      let newAvatarUrl = avatarUrl;
+
+      if (croppedAvatarBlob) {
+        console.log('[Submit] Uploading new cropped avatar...');
+        newAvatarUrl = await uploadAvatarToServer();
+      } else {
+        console.log('[Submit] No cropped avatar blob, skipping avatar upload');
+      }
+
+      console.log('[Submit] Sending profile update to backend...');
       const res = await editUserProfile({
         ...formData,
-        avatarUrl,
+        avatarUrl: newAvatarUrl,
       });
 
+      console.log('[Submit] Profile updated successfully:', res.data);
       onUpdate(res.data);
       onClose();
       toast.success('Profile updated successfully!');
     } catch (err) {
+      console.error('[Submit] Error updating profile:', err);
       toast.error('Failed to update profile');
-      console.error(err);
     }
   };
 
@@ -93,6 +114,7 @@ const EditProfileModal = ({ currentUser, onClose, onUpdate }) => {
         textColor="text-gray-700"
         className="border border-gray-300 hover:bg-gray-200"
       />
+
       <Button
         text={
           uploading ? (
@@ -106,6 +128,7 @@ const EditProfileModal = ({ currentUser, onClose, onUpdate }) => {
         textColor="text-white"
         className="hover:from-green-600 hover:to-green-700 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl"
         type="submit"
+        disabled={uploading}
       />
     </div>
   );
@@ -116,35 +139,45 @@ const EditProfileModal = ({ currentUser, onClose, onUpdate }) => {
       onClose={onClose}
       title="Edit Profile"
       footer={modalFooter}
-      size="md"
+      size="lg"
     >
       <Form onSubmit={handleSubmit}>
         <div className="px-6 py-6 space-y-6">
           {/* Avatar Section */}
-          <div className="text-center">
+          <div className="text-center space-y-4">
             <Avatar
-              src={avatarUrl}
+              src={
+                croppedAvatarBlob
+                  ? URL.createObjectURL(croppedAvatarBlob)
+                  : avatarUrl
+              }
               alt="Profile Avatar"
               fallback={formData.username.charAt(0).toUpperCase()}
               size="lg"
-              showUpdateIndicator={userUpdated && !uploading}
+              showUpdateIndicator={uploading}
             />
 
-            <div className="mt-4">
-              <ImageCropUpload onUpload={handleAvatarUpload} />
-
-              {uploading && (
-                <div className="mt-3 flex items-center justify-center text-blue-600">
-                  <LoadingSpinner size="sm" text="Uploading avatar..." />
-                </div>
-              )}
-
-              {userUpdated && !uploading && (
-                <p className="text-sm text-green-600 mt-2 font-medium">
-                  ✓ Avatar updated successfully!
-                </p>
-              )}
-            </div>
+            {/* Image Crop Upload Component */}
+            <ImageCropUpload
+              onImageReady={(blob) => {
+                console.log('[ImageCropUpload] Cropped blob ready');
+                setCroppedAvatarBlob(blob);
+                setAvatarUrl(URL.createObjectURL(blob));
+              }}
+              onImageRemove={() => {
+                console.log('[ImageCropUpload] Image removed');
+                setCroppedAvatarBlob(null);
+                setAvatarUrl(currentUser.avatarUrl || null);
+              }}
+              aspectRatio={1}
+              cropShape="round"
+              className="max-w-md mx-auto"
+            />
+            {uploading && (
+              <div className="flex items-center justify-center text-blue-600">
+                <LoadingSpinner size="sm" text="Uploading avatar..." />
+              </div>
+            )}
           </div>
 
           {/* Username Field */}

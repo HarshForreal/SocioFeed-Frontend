@@ -1,76 +1,107 @@
-import React, { useState, useCallback } from 'react';
+import React, { useRef, useState } from 'react';
 import Cropper from 'react-easy-crop';
 import getCroppedImg from '../../../utils/cropImage';
-import { toast } from 'react-toastify';
+import PropTypes from 'prop-types';
 
-const ImageCropUpload = ({ onUpload }) => {
+const ImageCropUpload = ({
+  onImageReady,
+  onImageRemove,
+  aspectRatio = 1,
+  cropShape = 'round',
+  className = '',
+}) => {
+  const inputRef = useRef();
   const [imageSrc, setImageSrc] = useState(null);
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
 
-  const onFileChange = async (e) => {
-    if (e.target.files && e.target.files.length > 0) {
-      const file = e.target.files[0];
-      if (!file.type.startsWith('image/')) {
-        toast.error('Please select an image file');
-        return;
-      }
+  const handleFileChange = async (e) => {
+    const file = e.target.files[0];
+    if (file) {
       const imageDataUrl = await readFile(file);
       setImageSrc(imageDataUrl);
     }
   };
 
-  const onCropComplete = useCallback((_, croppedAreaPixels) => {
-    setCroppedAreaPixels(croppedAreaPixels);
-  }, []);
+  const readFile = (file) => {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.addEventListener('load', () => resolve(reader.result));
+      reader.readAsDataURL(file);
+    });
+  };
 
-  const onUploadClick = async () => {
+  const onCropComplete = (croppedArea, croppedAreaPixels) => {
+    setCroppedAreaPixels(croppedAreaPixels);
+  };
+
+  const handleAutoCrop = async () => {
     try {
-      const croppedBlob = await getCroppedImg(imageSrc, croppedAreaPixels);
-      onUpload(croppedBlob); // pass cropped image blob to parent
-      setImageSrc(null); // reset cropper UI
+      const croppedImage = await getCroppedImg(imageSrc, croppedAreaPixels);
+      onImageReady(croppedImage);
     } catch (err) {
-      toast.error('Failed to crop image');
-      console.error(err);
+      console.error('Auto crop failed', err);
     }
   };
 
+  // trigger crop once cropped area is available
+  React.useEffect(() => {
+    if (imageSrc && croppedAreaPixels) {
+      handleAutoCrop();
+    }
+  }, [croppedAreaPixels]);
+
   return (
-    <div>
-      {!imageSrc ? (
-        <input type="file" accept="image/*" onChange={onFileChange} />
-      ) : (
-        <>
-          <div style={{ position: 'relative', width: 300, height: 300 }}>
-            <Cropper
-              image={imageSrc}
-              crop={crop}
-              zoom={zoom}
-              aspect={1}
-              onCropChange={setCrop}
-              onZoomChange={setZoom}
-              onCropComplete={onCropComplete}
-            />
-          </div>
+    <div className={className}>
+      <input
+        type="file"
+        accept="image/*"
+        ref={inputRef}
+        onChange={handleFileChange}
+        className="mb-2"
+      />
+
+      {imageSrc && (
+        <div className="relative w-full h-64 bg-gray-100 rounded-lg overflow-hidden">
+          <Cropper
+            image={imageSrc}
+            crop={crop}
+            zoom={zoom}
+            aspect={aspectRatio}
+            cropShape={cropShape}
+            showGrid={false}
+            onCropChange={setCrop}
+            onZoomChange={setZoom}
+            onCropComplete={onCropComplete}
+          />
+        </div>
+      )}
+
+      {imageSrc && (
+        <div className="flex justify-center mt-2">
           <button
-            onClick={onUploadClick}
-            className="mt-2 px-4 py-2 bg-blue-600 text-white rounded"
+            type="button"
+            onClick={() => {
+              setImageSrc(null);
+              onImageRemove();
+            }}
+            className="text-sm text-red-600 underline"
           >
-            Upload Cropped Image
+            Remove Image
           </button>
-        </>
+        </div>
       )}
     </div>
   );
 };
 
-function readFile(file) {
-  return new Promise((resolve) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result);
-    reader.readAsDataURL(file);
-  });
-}
+ImageCropUpload.propTypes = {
+  onImageReady: PropTypes.func.isRequired,
+  onImageRemove: PropTypes.func.isRequired,
+  aspectRatio: PropTypes.number,
+  cropShape: PropTypes.string,
+  className: PropTypes.string,
+};
 
 export default ImageCropUpload;

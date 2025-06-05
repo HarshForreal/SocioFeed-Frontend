@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import Landing from '../pages/Home/Landing';
 import Login from '../pages/Auth/Login';
@@ -20,14 +21,21 @@ import DashboardLayout from '../layouts/DashboardLayout';
 import PrivateRoute from '../components/Route/PrivateRoute';
 
 import { verifySession } from '../store/slices/authSlice';
-import EditProfileModal from '../components/Dashboard/Profile/EditProfileModal';
-
+import { fetchUserProfile } from '../store/slices/userSlice';
 const AppRouter = () => {
   const dispatch = useDispatch();
+  const authUser = useSelector((state) => state.auth.user);
 
   useEffect(() => {
     dispatch(verifySession());
   }, [dispatch]);
+
+  useEffect(() => {
+    // Fetch user profile only when auth user is available
+    if (authUser?.username) {
+      dispatch(fetchUserProfile(authUser.username));
+    }
+  }, [authUser?.username, dispatch]);
 
   return (
     <Router>

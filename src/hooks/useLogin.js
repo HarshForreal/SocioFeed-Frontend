@@ -23,7 +23,6 @@ const useLogin = () => {
       console.log('✅ Login API success:', res.data);
       const token = res.data.token;
       localStorage.setItem('token', token);
-      // Immediately update Redux state with user and login status
       dispatch(setUser(res.data.user));
       dispatch(setIsLoggedIn(true));
       dispatch(verifySession());

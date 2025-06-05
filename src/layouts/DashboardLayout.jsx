@@ -6,7 +6,7 @@ import { Outlet } from 'react-router-dom';
 const DashboardLayout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  return (
+  return (  
     <div className="relative min-h-screen">
       {/* Sidebar fixed on left, full height, scrollable if needed */}
       <div

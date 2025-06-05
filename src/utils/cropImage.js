@@ -1,8 +1,12 @@
+// src/utils/getCroppedImg.js
+
 export default function getCroppedImg(imageSrc, pixelCrop) {
   const canvas = document.createElement('canvas');
   const image = new Image();
 
   return new Promise((resolve, reject) => {
+    image.crossOrigin = 'anonymous'; // ✅ Fix for CORS & canvas taint issues
+
     image.onload = () => {
       canvas.width = pixelCrop.width;
       canvas.height = pixelCrop.height;

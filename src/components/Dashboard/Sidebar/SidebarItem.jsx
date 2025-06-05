@@ -16,7 +16,6 @@ const SidebarItem = ({ icon, label, to }) => {
       {icon}
       <span>{label}</span>
     </Link>
-    
   );
 };
 
