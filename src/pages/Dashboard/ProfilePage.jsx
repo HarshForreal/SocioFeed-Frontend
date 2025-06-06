@@ -14,11 +14,8 @@ const ProfilePage = () => {
   const userId = useSelector((state) => state.auth.user?.id);
   const { profile, loading, error } = useSelector((state) => state.user);
 
-  const {
-    posts,
-    loading: postsLoading,
-    // error: postsError,
-  } = useSelector((state) => state.posts);
+  const { posts, loading: postsLoading } = useSelector((state) => state.posts);
+  console.log('Posts', posts);
 
   const [modalOpen, setModalOpen] = useState(false);
   const [modalTitle, setModalTitle] = useState('');

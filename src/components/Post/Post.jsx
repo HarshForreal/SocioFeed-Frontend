@@ -1,74 +1,144 @@
-const generateOptimizedImageUrl = (imageUrl) => {
-  const url = typeof imageUrl === 'string' ? imageUrl : imageUrl?.url;
-
-  if (!url) {
-    return '';
-  }
-
-  return url.replace('/upload/', '/upload/q_auto,f_auto,w_800,h_600,c_limit/');
-};
+import { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { useLikePost } from '../../hooks/useLikePost';
+import { useComments } from '../../hooks/useComments';
+import { useSavePost } from '../../hooks/useSavePost';
+import { generateOptimizedImageUrl } from '../../utils/imageUtils';
+import PostActionBar from './PostActionBar';
+import CommentModal from './CommentModal';
+import ImageCarouselModal from '../common/ImageCropUpload/ImageCarouselModal ';
 
 const Post = ({ post }) => {
   const {
+    id,
     content,
     createdAt,
     author,
-    images,
-    likesCount,
-    commentsCount,
-    likes,
-    comments,
-    savedBy,
+    // images = [],
+    likes = [],
+    likesCount = likes?.length || 0,
+    savedBy = [],
   } = post;
+  const user = useSelector((state) => state.auth.user);
+  const {
+    isLiked,
+    likesCount: liveLikesCount,
+    isLiking,
+    toggleLike,
+  } = useLikePost(id, likesCount, user.id, post.likes || []);
+  const { isSaved, isSaving, toggleSave } = useSavePost(
+    id,
+    savedBy.some((u) => u.id === user.id)
+  );
+  const [showCommentModal, setShowCommentModal] = useState(false);
 
-  const displayLikes = likesCount ?? likes?.length ?? 0;
-  const displayComments = commentsCount ?? comments?.length ?? 0;
+  const { comments: fetchedComments, submitComment } = useComments(id);
 
-  const formattedImages = images && images.length > 0 ? images : [];
+  const handleSubmitComment = async (htmlContent) => {
+    await submitComment(htmlContent);
+  };
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+
+  const handleImageClick = (index) => {
+    setSelectedImageIndex(index);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
 
   return (
     <div className="bg-white rounded-lg shadow p-4 mb-6">
+      {/* Author */}
       <div className="flex items-center gap-3 mb-3">
         <img
           src={author?.avatarUrl || '/default-avatar.png'}
           alt={author?.username || 'User'}
           className="w-10 h-10 rounded-full object-cover"
         />
-        <div>
-          <p className="font-semibold text-gray-900">
-            {author?.username || 'Unknown'}
-          </p>
-        </div>
+        <p className="geist text-gray-900 font-bold">
+          {author?.username || 'Unknown'}
+        </p>
       </div>
 
-      {/* Render images */}
-      {formattedImages.length > 0 && (
+      {/* Images */}
+      {/* {images.length > 0 && (
         <div className="grid grid-cols-2 gap-2 mb-3">
-          {formattedImages.map((url, index) => {
-            // Generate optimized image URL
-            const optimizedUrl = generateOptimizedImageUrl(url);
-            return (
-              <img
-                key={index}
-                src={optimizedUrl} // Use the optimized URL
-                alt={`Post Image ${index + 1}`}
-                className="w-full h-48 object-cover rounded-md"
-                loading="lazy"
-              />
-            );
-          })}
+          {images.map((url, idx) => (
+            <img
+              key={idx}
+              src={generateOptimizedImageUrl(url)}
+              alt={`Post Image ${idx + 1}`}
+              className="w-full h-48 object-cover rounded-md"
+              loading="lazy"
+            />
+          ))}
+        </div>
+      )} */}
+
+      {post.images.length > 0 && (
+        <div className="grid grid-cols-2 gap-2 mb-3">
+          {post.images.map((url, idx) => (
+            <img
+              key={idx}
+              src={generateOptimizedImageUrl(url)}
+              alt={`Post Image ${idx + 1}`}
+              className="w-full h-48 object-cover rounded-md"
+              loading="lazy"
+              onClick={() => handleImageClick(idx)} // Open the carousel on click
+            />
+          ))}
         </div>
       )}
 
-      <p className="mb-3 text-gray-800">{content}</p>
+      {/* Image Carousel Modal */}
+      {isModalOpen && (
+        <ImageCarouselModal
+          images={post.images}
+          selectedIndex={selectedImageIndex}
+          onClose={handleCloseModal}
+        />
+      )}
 
-      <div className="flex items-center gap-4 text-gray-600">
-        <button>👍 {displayLikes}</button>
-        <button>💬 {displayComments}</button>
-        <button>🔖 {savedBy?.length || 0}</button>
-      </div>
+      {/* Image Carousel Modal */}
+      {isModalOpen && (
+        <ImageCarouselModal
+          images={post.images}
+          selectedIndex={selectedImageIndex}
+          onClose={handleCloseModal}
+        />
+      )}
 
-      <p className="text-xs text-gray-400 mt-2">
+      {/* Content */}
+      <p className="mb-3 text-gray-800 geist">{content}</p>
+
+      {/* Actions */}
+
+      <PostActionBar
+        isLiked={isLiked}
+        likesCount={liveLikesCount}
+        isLiking={isLiking}
+        onLike={toggleLike}
+        commentsCount={fetchedComments.length}
+        isSaved={isSaved}
+        isSaving={isSaving}
+        onSave={toggleSave}
+        onCommentClick={() => setShowCommentModal(true)}
+      />
+
+      {/* ✅ Pass the required props to CommentModal */}
+      <CommentModal
+        postId={id}
+        isOpen={showCommentModal}
+        onClose={() => setShowCommentModal(false)}
+        onSubmitComment={handleSubmitComment}
+        comments={fetchedComments}
+      />
+
+      {/* Timestamp */}
+      <p className="text-xs text-gray-400 mt-2 geist">
         {new Date(createdAt).toLocaleString()}
       </p>
     </div>

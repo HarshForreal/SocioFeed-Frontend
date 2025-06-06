@@ -8,7 +8,6 @@ const ScrollPage = () => {
   const { posts, loading, error, page, hasMore } = useSelector(
     (state) => state.feed
   );
-  console.log('Post from Scroll Page', posts);
   const observer = useRef();
 
   const lastPostRef = useCallback(
@@ -34,7 +33,7 @@ const ScrollPage = () => {
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
-      <h2 className="text-xl font-semibold mb-4">Your Feed</h2>
+      <h2 className="mb-4 instrument text-2xl"></h2>
 
       {posts.length === 0 && !loading && <p>No posts to display.</p>}
 

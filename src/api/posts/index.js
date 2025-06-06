@@ -37,3 +37,8 @@ export const editComment = (commentId, content) =>
 
 export const deleteComment = (commentId) =>
   api.delete(apiEndpoints.post.DELETE_COMMENT(commentId));
+
+export const fetchSavedPosts = (skip = 0, take = 10) =>
+  api.get(apiEndpoints.post.GET_SAVED_POSTS, {
+    params: { skip, take },
+  });

@@ -11,6 +11,7 @@ const postEndpoints = {
   GET_COMMENTS: (postId) => `/post/${postId}/comments`,
   EDIT_COMMENT: (commentId) => `/post/comment/edit/${commentId}`,
   DELETE_COMMENT: (commentId) => `/post/comment/delete/${commentId}`,
+  GET_SAVED_POSTS: '/post/saved',
 };
 
 export default postEndpoints;

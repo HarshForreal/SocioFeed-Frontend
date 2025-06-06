@@ -1,5 +1,6 @@
 // tailwind.config.js
 import { defineConfig } from 'tailwindcss/helpers';
+import typography from '@tailwindcss/typography';
 
 export default defineConfig({
   theme: {
@@ -10,4 +11,5 @@ export default defineConfig({
     },
   },
   content: ['./index.html', './src/**/*.{js,jsx,ts,tsx}'],
+  plugins: [typography],
 });
