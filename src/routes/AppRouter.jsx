@@ -12,10 +12,10 @@ import ForgotPassword from '../pages/Auth/ForgotPassword';
 import ResetPassword from '../pages/Auth/ResetPassword';
 
 import ScrollPage from '../pages/Dashboard/ScrollPage';
-import InboxPage from '../pages/Dashboard/InboxPage';
 import SearchPage from '../pages/Dashboard/SearchPage';
 import BookmarkPage from '../pages/Dashboard/BookmarkPage';
 import ProfilePage from '../pages/Dashboard/ProfilePage';
+import ChatPage from '../pages/Dashboard/ChatPage';
 
 import DashboardLayout from '../layouts/DashboardLayout';
 import PrivateRoute from '../components/Route/PrivateRoute';
@@ -59,10 +59,10 @@ const AppRouter = () => {
           }
         >
           <Route path="dashboard" element={<ScrollPage />} />
-          <Route path="inbox" element={<InboxPage />} />
           <Route path="search" element={<SearchPage />} />
           <Route path="bookmarks" element={<BookmarkPage />} />
           <Route path="profile" element={<ProfilePage />} />
+          <Route path="chat/*" element={<ChatPage />} />
         </Route>
       </Routes>
     </Router>

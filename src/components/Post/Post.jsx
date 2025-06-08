@@ -63,21 +63,6 @@ const Post = ({ post }) => {
         </p>
       </div>
 
-      {/* Images */}
-      {/* {images.length > 0 && (
-        <div className="grid grid-cols-2 gap-2 mb-3">
-          {images.map((url, idx) => (
-            <img
-              key={idx}
-              src={generateOptimizedImageUrl(url)}
-              alt={`Post Image ${idx + 1}`}
-              className="w-full h-48 object-cover rounded-md"
-              loading="lazy"
-            />
-          ))}
-        </div>
-      )} */}
-
       {post.images.length > 0 && (
         <div className="grid grid-cols-2 gap-2 mb-3">
           {post.images.map((url, idx) => (

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { addPost } from '../../store/slices/postsSlice';
 import Modal from '../common/Modal/Modal';
@@ -15,17 +15,68 @@ const PostUploadModal = ({ isOpen, onClose, onSubmit }) => {
 
   // Handle when images are ready from the crop component
   const handleImagesReady = (imageBlobs) => {
-    setCroppedImages(imageBlobs);
+    console.log('Images ready:', imageBlobs);
+    console.log('Type of imageBlobs:', typeof imageBlobs);
+    console.log('Is array:', Array.isArray(imageBlobs));
+
+    // Handle different formats that might be returned
+    if (Array.isArray(imageBlobs)) {
+      setCroppedImages(imageBlobs);
+    } else if (imageBlobs) {
+      // If it's a single blob/file, wrap it in an array
+      setCroppedImages([imageBlobs]);
+    } else {
+      setCroppedImages([]);
+    }
   };
 
   // Handle when images are removed
   const handleImageRemove = () => {
+    console.log('Images removed');
     setCroppedImages([]);
   };
 
+  // Check if we can submit with detailed logging
+  // Ensure croppedImages is treated as an array for validation
+  const imagesArray = Array.isArray(croppedImages)
+    ? croppedImages
+    : croppedImages
+      ? [croppedImages]
+      : [];
+  const canSubmit = imagesArray.length > 0 && caption.trim() && !isSubmitting;
+
+  // Debug logging whenever conditions change
+  useEffect(() => {
+    const imagesArray = Array.isArray(croppedImages)
+      ? croppedImages
+      : croppedImages
+        ? [croppedImages]
+        : [];
+    console.log('=== Submit Button Debug ===');
+    console.log('croppedImages raw:', croppedImages);
+    console.log('croppedImages type:', typeof croppedImages);
+    console.log('croppedImages isArray:', Array.isArray(croppedImages));
+    console.log('imagesArray.length:', imagesArray.length);
+    console.log('caption:', caption);
+    console.log('caption.trim():', caption.trim());
+    console.log('isSubmitting:', isSubmitting);
+    console.log('canSubmit:', canSubmit);
+    console.log('========================');
+  }, [croppedImages, caption, isSubmitting, canSubmit]);
+
   // Handle the form submission
   const handleSubmit = async () => {
-    if (croppedImages.length === 0 || !caption.trim()) {
+    console.log('Submit clicked - croppedImages:', croppedImages);
+    console.log('Submit clicked - caption:', caption);
+
+    // Ensure croppedImages is an array
+    const imagesArray = Array.isArray(croppedImages)
+      ? croppedImages
+      : croppedImages
+        ? [croppedImages]
+        : [];
+
+    if (imagesArray.length === 0 || !caption.trim()) {
       toast.error('Please select at least one image and add a caption');
       return;
     }
@@ -38,11 +89,12 @@ const PostUploadModal = ({ isOpen, onClose, onSubmit }) => {
       try {
         // Create FormData and append all cropped images
         const formData = new FormData();
-        croppedImages.forEach((imageBlob, index) => {
+        imagesArray.forEach((imageBlob, index) => {
+          console.log(`Appending image ${index}:`, imageBlob);
           formData.append('images', imageBlob, `image-${index}.jpg`);
         });
 
-        console.log(`Uploading ${croppedImages.length} images...`);
+        console.log(`Uploading ${imagesArray.length} images...`);
 
         // Send the file upload request
         const uploadResponse = await api.post('/post/upload', formData, {
@@ -108,9 +160,6 @@ const PostUploadModal = ({ isOpen, onClose, onSubmit }) => {
     onClose();
   };
 
-  // Check if we can submit
-  const canSubmit = croppedImages.length > 0 && caption.trim() && !isSubmitting;
-
   return (
     <Modal isOpen={isOpen} onClose={handleClose} title="Create Post" size="lg">
       <div className="p-6 space-y-6">
@@ -133,11 +182,29 @@ const PostUploadModal = ({ isOpen, onClose, onSubmit }) => {
           </div>
 
           {/* Show selected images count */}
-          {croppedImages.length > 0 && (
+          {(Array.isArray(croppedImages)
+            ? croppedImages
+            : croppedImages
+              ? [croppedImages]
+              : []
+          ).length > 0 && (
             <div className="text-center">
               <p className="text-sm text-green-600 font-medium">
-                ✓ {croppedImages.length} image
-                {croppedImages.length > 1 ? 's' : ''} ready for posting
+                ✓{' '}
+                {
+                  (Array.isArray(croppedImages)
+                    ? croppedImages
+                    : [croppedImages]
+                  ).length
+                }{' '}
+                image
+                {(Array.isArray(croppedImages)
+                  ? croppedImages
+                  : [croppedImages]
+                ).length > 1
+                  ? 's'
+                  : ''}{' '}
+                ready for posting
               </p>
             </div>
           )}
