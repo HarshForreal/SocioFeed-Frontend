@@ -54,10 +54,11 @@
 
 // export default ScrollPage;
 
-import React, { useEffect, useRef, useCallback } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Post from '../../components/Post/Post';
-import { fetchFeedPosts, clearFeedPosts } from '../../store/slices/feedSlice';
+import { fetchFeedPosts } from '../../store/thunks/feedThunks';
+import { clearFeedPosts } from '../../store/slices/feedSlice';
 import { useInView } from 'react-intersection-observer'; // Import from react-intersection-observer
 
 const ScrollPage = () => {

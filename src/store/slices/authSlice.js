@@ -1,18 +1,6 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { verifyUser } from '../../api/auth';
-export const verifySession = createAsyncThunk(
-  'auth/verifySession',
-  async (_, { rejectWithValue }) => {
-    try {
-      const res = await verifyUser();
-      return res.data.user;
-    } catch (err) {
-      return rejectWithValue(
-        err.response?.data || { message: 'Session verification failed' }
-      );
-    }
-  }
-);
+// store/slices/authSlice.js
+import { createSlice } from '@reduxjs/toolkit';
+import { verifySession } from '../thunks/authThunks';
 
 const initialState = {
   isLoggedIn: false,
@@ -26,7 +14,6 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     setIsLoggedIn(state, action) {
-      console.log('Redux setIsLoggedIn →', action.payload);
       state.isLoggedIn = action.payload;
     },
     setUser(state, action) {

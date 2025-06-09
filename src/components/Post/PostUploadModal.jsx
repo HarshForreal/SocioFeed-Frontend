@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { addPost } from '../../store/slices/postsSlice';
 import Modal from '../common/Modal/Modal';
@@ -15,15 +15,9 @@ const PostUploadModal = ({ isOpen, onClose, onSubmit }) => {
 
   // Handle when images are ready from the crop component
   const handleImagesReady = (imageBlobs) => {
-    console.log('Images ready:', imageBlobs);
-    console.log('Type of imageBlobs:', typeof imageBlobs);
-    console.log('Is array:', Array.isArray(imageBlobs));
-
-    // Handle different formats that might be returned
     if (Array.isArray(imageBlobs)) {
       setCroppedImages(imageBlobs);
     } else if (imageBlobs) {
-      // If it's a single blob/file, wrap it in an array
       setCroppedImages([imageBlobs]);
     } else {
       setCroppedImages([]);
@@ -32,43 +26,18 @@ const PostUploadModal = ({ isOpen, onClose, onSubmit }) => {
 
   // Handle when images are removed
   const handleImageRemove = () => {
-    console.log('Images removed');
     setCroppedImages([]);
   };
 
-  // Check if we can submit with detailed logging
-  // Ensure croppedImages is treated as an array for validation
+  // Check if we can submit
   const imagesArray = Array.isArray(croppedImages)
     ? croppedImages
     : croppedImages
       ? [croppedImages]
       : [];
   const canSubmit = imagesArray.length > 0 && caption.trim() && !isSubmitting;
-
-  // Debug logging whenever conditions change
-  useEffect(() => {
-    const imagesArray = Array.isArray(croppedImages)
-      ? croppedImages
-      : croppedImages
-        ? [croppedImages]
-        : [];
-    console.log('=== Submit Button Debug ===');
-    console.log('croppedImages raw:', croppedImages);
-    console.log('croppedImages type:', typeof croppedImages);
-    console.log('croppedImages isArray:', Array.isArray(croppedImages));
-    console.log('imagesArray.length:', imagesArray.length);
-    console.log('caption:', caption);
-    console.log('caption.trim():', caption.trim());
-    console.log('isSubmitting:', isSubmitting);
-    console.log('canSubmit:', canSubmit);
-    console.log('========================');
-  }, [croppedImages, caption, isSubmitting, canSubmit]);
-
   // Handle the form submission
   const handleSubmit = async () => {
-    console.log('Submit clicked - croppedImages:', croppedImages);
-    console.log('Submit clicked - caption:', caption);
-
     // Ensure croppedImages is an array
     const imagesArray = Array.isArray(croppedImages)
       ? croppedImages
@@ -81,7 +50,6 @@ const PostUploadModal = ({ isOpen, onClose, onSubmit }) => {
       return;
     }
 
-    // Check if the user is logged in and token exists in localStorage
     const token = localStorage.getItem('token');
 
     if (isLoggedIn && user && token) {
@@ -90,21 +58,13 @@ const PostUploadModal = ({ isOpen, onClose, onSubmit }) => {
         // Create FormData and append all cropped images
         const formData = new FormData();
         imagesArray.forEach((imageBlob, index) => {
-          console.log(`Appending image ${index}:`, imageBlob);
           formData.append('images', imageBlob, `image-${index}.jpg`);
         });
-
-        console.log(`Uploading ${imagesArray.length} images...`);
 
         // Send the file upload request
         const uploadResponse = await api.post('/post/upload', formData, {
           withCredentials: true,
         });
-
-        console.log(
-          'Images uploaded successfully:',
-          uploadResponse.data.imageUrls
-        );
 
         // Once the images are uploaded, proceed with creating the post
         const postData = {
@@ -112,12 +72,8 @@ const PostUploadModal = ({ isOpen, onClose, onSubmit }) => {
           imageUrls: uploadResponse.data.imageUrls,
         };
 
-        console.log('Creating post with data:', postData);
-
-        // Make direct API call to create post since images are already uploaded
+        // Make direct API call to create post
         const postResponse = await api.post('/post/create', postData);
-
-        console.log('Post created successfully:', postResponse.data);
 
         // Add the new post to Redux store
         dispatch(addPost(postResponse.data));
@@ -135,9 +91,6 @@ const PostUploadModal = ({ isOpen, onClose, onSubmit }) => {
           onSubmit();
         }
       } catch (error) {
-        console.error('Error during post creation:', error);
-
-        // Better error handling
         if (error.response?.data?.message) {
           toast.error(`Error: ${error.response.data.message}`);
         } else {
@@ -147,7 +100,6 @@ const PostUploadModal = ({ isOpen, onClose, onSubmit }) => {
         setIsSubmitting(false);
       }
     } else {
-      console.log('User is not logged in or token is missing');
       toast.error('Please log in to create a post.');
       onClose();
     }

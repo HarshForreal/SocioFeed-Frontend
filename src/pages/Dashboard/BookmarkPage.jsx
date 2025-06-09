@@ -23,7 +23,8 @@ const BookmarkPage = () => {
   }, []);
 
   if (loading) return <div>Loading...</div>;
-  if (!savedPosts.length) return <div>No saved posts yet.</div>;
+  if (!savedPosts.length)
+    return <div className="text-2xl geist ">No saved posts yet.</div>;
 
   return (
     <div className="flex flex-col gap-4 max-w-4xl mx-auto">

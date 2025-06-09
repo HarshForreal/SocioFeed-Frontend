@@ -1,5 +1,6 @@
 import useUserSearch from '../../hooks/useUserSearch';
 import Button from '../../components/common/Button/Button';
+import { Link } from 'react-router-dom';
 
 const SearchPage = () => {
   const { query, setQuery, users, loading, followingSet, toggleFollow } =
@@ -28,7 +29,10 @@ const SearchPage = () => {
             key={user.id}
             className="flex items-center justify-between py-3 hover:bg-gray-50 rounded px-2"
           >
-            <div className="flex items-center gap-4">
+            <Link
+              to={`/profile/${user.username}`}
+              className="flex items-center gap-4"
+            >
               <img
                 src={user.avatarUrl || '/default-avatar.png'}
                 alt={user.username}
@@ -38,8 +42,7 @@ const SearchPage = () => {
                 <p className="font-semibold">{user.username}</p>
                 <p className="text-sm text-gray-600">{user.bio || 'No bio'}</p>
               </div>
-            </div>
-
+            </Link>
             <Button
               text={followingSet.has(user.id) ? 'Unfollow' : 'Follow'}
               color={followingSet.has(user.id) ? 'bg-gray-300' : 'bg-blue-500'}

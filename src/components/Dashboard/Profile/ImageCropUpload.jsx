@@ -1,7 +1,6 @@
 // components/ImageCropUpload.jsx
 import React, { useRef, useState } from 'react';
 import Cropper from 'react-easy-crop';
-// import getCroppedImg from '../../utils/cropImage';
 import getCroppedImg from '../../../utils/cropImage';
 import PropTypes from 'prop-types';
 

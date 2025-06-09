@@ -1,21 +1,6 @@
 // store/slices/userSlice.js
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { getUserProfile } from '../../api/user';
-
-// Async thunk to fetch user profile
-export const fetchUserProfile = createAsyncThunk(
-  'user/fetchUserProfile',
-  async (username, thunkAPI) => {
-    try {
-      const response = await getUserProfile(username);
-      return response.data;
-    } catch (err) {
-      return thunkAPI.rejectWithValue(
-        err.response?.data?.message || err.message
-      );
-    }
-  }
-);
+import { createSlice } from '@reduxjs/toolkit';
+import { fetchUserProfile } from '../thunks/userThunks';
 
 const userSlice = createSlice({
   name: 'user',
@@ -49,5 +34,4 @@ const userSlice = createSlice({
 });
 
 export const { clearUserProfile } = userSlice.actions;
-
 export default userSlice.reducer;

@@ -20,8 +20,8 @@ import ChatPage from '../pages/Dashboard/ChatPage';
 import DashboardLayout from '../layouts/DashboardLayout';
 import PrivateRoute from '../components/Route/PrivateRoute';
 
-import { verifySession } from '../store/slices/authSlice';
-import { fetchUserProfile } from '../store/slices/userSlice';
+import { verifySession } from '../store/thunks/authThunks';
+import { fetchUserProfile } from '../store/thunks/userThunks';
 const AppRouter = () => {
   const dispatch = useDispatch();
   const authUser = useSelector((state) => state.auth.user);
@@ -61,7 +61,9 @@ const AppRouter = () => {
           <Route path="dashboard" element={<ScrollPage />} />
           <Route path="search" element={<SearchPage />} />
           <Route path="bookmarks" element={<BookmarkPage />} />
-          <Route path="profile" element={<ProfilePage />} />
+          {/* <Route path="profile" element={<ProfilePage />} /> */}
+          <Route path="profile/:username" element={<ProfilePage />} />
+
           <Route path="chat/*" element={<ChatPage />} />
         </Route>
       </Routes>

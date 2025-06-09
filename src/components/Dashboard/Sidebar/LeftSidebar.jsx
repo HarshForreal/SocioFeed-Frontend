@@ -7,11 +7,14 @@ import SidebarProfile from './SidebarProfile';
 import LogoutButton from './LogoutButton';
 import EditProfileModal from '../Profile/EditProfileModal';
 import { setUser } from '../../../store/slices/authSlice';
+import ChatSidebar from '../../Chat/ChatSidebar';
 
 const LeftSidebar = ({ isOpen, onClose }) => {
   const dispatch = useDispatch();
-  const { profile } = useSelector((state) => state.user);
+  const loggedInUser = useSelector((state) => state.auth.user);
+  console.log('Logged in User', loggedInUser);
   const [isEditOpen, setIsEditOpen] = useState(false);
+  const [showChatSidebar, setShowChatSidebar] = useState(false);
 
   const openEdit = () => setIsEditOpen(true);
   const closeEdit = () => setIsEditOpen(false);
@@ -31,7 +34,7 @@ const LeftSidebar = ({ isOpen, onClose }) => {
       {/* Sidebar Container */}
       <div
         className={`fixed top-0 left-0 z-40 h-full w-64 transform bg-white transition-transform duration-300 border-r border-gray-200 shadow-lg
-        ${isOpen ? 'translate-x-0' : '-translate-x-full'} 
+        ${isOpen ? 'translate-x-0' : '-translate-x-full'}
         md:translate-x-0 md:relative md:flex md:flex-col md:h-screen md:w-64`}
       >
         {/* Mobile Close */}
@@ -58,24 +61,28 @@ const LeftSidebar = ({ isOpen, onClose }) => {
 
         <SidebarHeader />
 
-        {/* Remove Profile Button from SidebarMenu */}
-        <SidebarMenu
-          onEditProfile={profile ? openEdit : null}
-          hideProfileOption
-        />
+        {showChatSidebar ? (
+          <ChatSidebar onBack={() => setShowChatSidebar(false)} />
+        ) : (
+          <SidebarMenu
+            onEditProfile={loggedInUser ? openEdit : null}
+            hideProfileOption
+            onChatClick={() => setShowChatSidebar(true)}
+          />
+        )}
 
         {/* Always show SidebarProfile if available */}
-        {profile && (
+        {loggedInUser && (
           <div className="mt-auto border-t border-gray-100 p-4">
             <Link
-              to="/profile"
+              to={`/profile/${loggedInUser.username}`}
               className="block hover:bg-gray-50 rounded-lg p-2 transition-colors duration-200"
             >
               <SidebarProfile
-                name={profile.username}
-                profileImage={profile.avatarUrl}
-                followers={profile.followerCount}
-                following={profile.followingCount}
+                name={loggedInUser.username}
+                profileImage={loggedInUser.avatarUrl}
+                followers={loggedInUser.followerCount}
+                following={loggedInUser.followingCount}
               />
             </Link>
 
@@ -93,9 +100,9 @@ const LeftSidebar = ({ isOpen, onClose }) => {
       </div>
 
       {/* Edit Profile Modal */}
-      {isEditOpen && profile && (
+      {isEditOpen && loggedInUser && (
         <EditProfileModal
-          currentUser={profile}
+          currentUser={loggedInUser}
           onClose={closeEdit}
           onUpdate={handleProfileUpdate}
         />

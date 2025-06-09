@@ -3,12 +3,14 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { loginUser } from '../api/auth';
 import { handleApiError } from '../utils/handleApiError';
-import {
-  setUser,
-  setIsLoggedIn,
-  verifySession,
-} from '../store/slices/authSlice';
+// import {
+//   setUser,
+//   setIsLoggedIn,
+//   verifySession,
+// } from '../store/slices/authSlice';
 
+import { setUser, setIsLoggedIn } from '../store/slices/authSlice';
+import { verifySession } from '../store/thunks/authThunks';
 const useLogin = () => {
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});

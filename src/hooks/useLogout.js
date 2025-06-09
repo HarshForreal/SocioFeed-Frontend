@@ -4,7 +4,7 @@ import { logoutUser } from '../api/auth';
 import { clearAuth } from '../store/slices/authSlice';
 import { useNavigate } from 'react-router-dom';
 import { handleApiError } from '../utils/handleApiError';
-import { verifySession } from '../store/slices/authSlice';
+import { verifySession } from '../store/thunks/authThunks';
 
 const useLogout = () => {
   const [loading, setLoading] = useState(false);

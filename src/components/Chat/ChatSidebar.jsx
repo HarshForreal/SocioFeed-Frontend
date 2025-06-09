@@ -7,7 +7,7 @@ const dummyUsers = [
   { id: '3', username: 'Aaryan', avatar: 'https://via.placeholder.com/40' },
 ];
 
-const ChatSidebar = () => {
+const ChatSidebar = ({ onBack }) => {
   const { userId } = useParams();
 
   return (
@@ -28,6 +28,12 @@ const ChatSidebar = () => {
           <span className="font-medium text-gray-800">{user.username}</span>
         </Link>
       ))}
+      <button
+        onClick={onBack}
+        className="text-sm text-blue-600 mb-4 hover:underline"
+      >
+        ← Back
+      </button>
     </div>
   );
 };
