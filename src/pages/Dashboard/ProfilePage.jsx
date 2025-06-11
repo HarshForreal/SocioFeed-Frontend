@@ -7,7 +7,7 @@ import Post from '../../components/Post/Post';
 import PostUploadModal from '../../components/Post/PostUploadModal';
 import FollowersFollowingModal from '../../components/Dashboard/Profile/FollowersFollowingModal';
 import { fetchUserPosts } from '../../store/thunks/postThunks';
-import { fetchFollowingList } from '../../store/thunks/userThunks'; // Add this import
+import { fetchFollowingList } from '../../store/thunks/userThunks';
 import useProfile from '../../hooks/useProfile';
 import useFollow from '../../hooks/useFollow';
 import { uploadAndCreatePost } from '../../store/thunks/postThunks';
@@ -42,7 +42,6 @@ const ProfilePage = () => {
   const [modalTitle, setModalTitle] = useState('');
   const [modalList, setModalList] = useState([]);
 
-  // Fetch following list when component mounts
   useEffect(() => {
     if (loggedInUser) {
       dispatch(fetchFollowingList());
@@ -51,7 +50,6 @@ const ProfilePage = () => {
 
   useEffect(() => {
     if (profile?.id) {
-      // Always fetch user posts - we'll conditionally render them based on follow status
       dispatch(fetchUserPosts({ userId: profile.id, skip: 0, take: 10 }));
     }
   }, [dispatch, profile?.id]);
@@ -68,7 +66,6 @@ const ProfilePage = () => {
 
   const openModalWithList = async (listType) => {
     setModalTitle(listType === 'followers' ? 'Followers' : 'Following');
-    // Fetching followers or following logic
     if (!profile) return;
     try {
       const res = await api.get(`/user/${listType}/${profile.id}`);
@@ -103,10 +100,8 @@ const ProfilePage = () => {
 
       <div className="flex justify-end mb-4">
         {isMyProfile ? (
-          // Show "Post" button if it's the logged-in user's profile
           <Button text="Post" onClick={() => setUploadOpen(true)} />
         ) : (
-          // Show "Follow" or "Unfollow" button if it's another user's profile
           <Button
             text={isFollowing ? 'Unfollow' : 'Follow'}
             onClick={toggleFollow}
@@ -118,7 +113,6 @@ const ProfilePage = () => {
 
       <div className="mt-6">
         {isMyProfile || isFollowing ? (
-          // Show posts only if it's my profile or I'm following the user
           posts?.length === 0 && !postsLoading ? (
             <p className="text-center text-gray-500 mt-4">
               No posts to display.
@@ -127,7 +121,6 @@ const ProfilePage = () => {
             posts.map((post) => <Post key={post.id} post={post} />)
           )
         ) : (
-          // Show message when not following the user
           <div className="text-center py-12">
             <h3>Please follow the user to see the posts</h3>
           </div>

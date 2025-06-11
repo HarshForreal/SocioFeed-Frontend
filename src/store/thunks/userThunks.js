@@ -1,4 +1,3 @@
-// src/store/thunks/userThunks.js
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import {
   getUserProfile,
@@ -14,13 +13,12 @@ import {
   setFollowingList,
 } from '../slices/userSlice';
 
-// Fetch User Profile Thunk
 export const fetchUserProfile = createAsyncThunk(
   'user/fetchUserProfile',
   async (username, { dispatch, thunkAPI }) => {
     try {
       const response = await getUserProfile(username);
-      dispatch(setProfile(response.data)); // Dispatch profile data to Redux
+      dispatch(setProfile(response.data));
       return response.data;
     } catch (err) {
       return thunkAPI.rejectWithValue(
@@ -30,14 +28,12 @@ export const fetchUserProfile = createAsyncThunk(
   }
 );
 
-// Follow User Thunk
 export const followUser = createAsyncThunk(
   'user/followUser',
   async (targetUserId, { dispatch, thunkAPI }) => {
     try {
       const res = await followUserApi(targetUserId);
 
-      // After successful follow, refresh the following list
       const followingResponse = await fetchFollowingListApi();
       dispatch(setFollowingList(followingResponse));
 
@@ -50,14 +46,12 @@ export const followUser = createAsyncThunk(
   }
 );
 
-// Unfollow User Thunk
 export const unfollowUser = createAsyncThunk(
   'user/unfollowUser',
   async (targetUserId, { dispatch, thunkAPI }) => {
     try {
       const res = await unfollowUserApi(targetUserId);
 
-      // After successful unfollow, refresh the following list
       const followingResponse = await fetchFollowingListApi();
       dispatch(setFollowingList(followingResponse));
 
@@ -70,13 +64,12 @@ export const unfollowUser = createAsyncThunk(
   }
 );
 
-// Fetch Followers List Thunk
 export const fetchFollowersList = createAsyncThunk(
   'user/fetchFollowersList',
   async (_, { dispatch, thunkAPI }) => {
     try {
       const response = await fetchFollowersListApi();
-      dispatch(setFollowersList(response)); // Dispatch followers list to Redux
+      dispatch(setFollowersList(response));
       return response;
     } catch (err) {
       return thunkAPI.rejectWithValue(err.message);
@@ -84,13 +77,12 @@ export const fetchFollowersList = createAsyncThunk(
   }
 );
 
-// Fetch Following List Thunk
 export const fetchFollowingList = createAsyncThunk(
   'user/fetchFollowingList',
   async (_, { dispatch, thunkAPI }) => {
     try {
       const response = await fetchFollowingListApi();
-      dispatch(setFollowingList(response)); // Dispatch following list to Redux
+      dispatch(setFollowingList(response));
       return response;
     } catch (err) {
       return thunkAPI.rejectWithValue(err.message);

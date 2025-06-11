@@ -1,6 +1,5 @@
-// src/hooks/usePosts.js
 import { useState, useEffect } from 'react';
-import { fetchUserPosts } from '../store/thunks/postThunks'; // Assuming this action exists
+import { fetchUserPosts } from '../store/thunks/postThunks';
 
 const usePosts = (userId) => {
   const [posts, setPosts] = useState([]);
@@ -15,12 +14,12 @@ const usePosts = (userId) => {
       setError(null);
 
       try {
-        console.log('Fetching posts for user ID:', userId); // Add logging here
+        console.log('Fetching posts for user ID:', userId);
         const response = await fetchUserPosts({ userId });
 
-        console.log('Fetched posts:', response.data.post); // Add logging here
+        console.log('Fetched posts:', response.data.post);
         if (response.data) {
-          setPosts(response.data); // Assuming response.data contains the posts
+          setPosts(response.data);
         } else {
           throw new Error('No posts data found');
         }

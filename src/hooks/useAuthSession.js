@@ -1,5 +1,3 @@
-// src/hooks/useAuthSession.js
-
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { verifySession } from '../store/thunks/authThunks';

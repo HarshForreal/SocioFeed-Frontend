@@ -1,4 +1,3 @@
-// src/pages/Auth/Activate.jsx
 import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import StatusMessage from '../../components/common/StatusMessage/StatusMessage';

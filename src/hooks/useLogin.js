@@ -3,12 +3,6 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { loginUser } from '../api/auth';
 import { handleApiError } from '../utils/handleApiError';
-// import {
-//   setUser,
-//   setIsLoggedIn,
-//   verifySession,
-// } from '../store/slices/authSlice';
-
 import { setUser, setIsLoggedIn } from '../store/slices/authSlice';
 import { verifySession } from '../store/thunks/authThunks';
 const useLogin = () => {
@@ -22,7 +16,7 @@ const useLogin = () => {
     try {
       setLoading(true);
       const res = await loginUser({ usernameOrEmail: email, password });
-      console.log('✅ Login API success:', res.data);
+      console.log('Login API success:', res.data);
       const token = res.data.token;
       localStorage.setItem('token', token);
       dispatch(setUser(res.data.user));

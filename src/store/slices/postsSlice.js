@@ -1,4 +1,3 @@
-// store/slices/postsSlice.js
 import { createSlice } from '@reduxjs/toolkit';
 import {
   fetchUserPosts,

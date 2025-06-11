@@ -1,4 +1,3 @@
-// store/thunks/feedThunks.js
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import api from '../../api/client';
 

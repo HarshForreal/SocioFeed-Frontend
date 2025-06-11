@@ -16,12 +16,10 @@ const AppRouter = () => {
   return (
     <Router>
       <Routes>
-        {/* public routes */}
         {publicRoutes.map(({ path, element }) => (
           <Route key={path} path={path} element={element} />
         ))}
 
-        {/* protected routes */}
         <Route
           path="/"
           element={

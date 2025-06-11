@@ -4,14 +4,12 @@ html {
   scroll-behavior: smooth;
 }
 
-/* Body or general font settings */
 body {
   font-family: 'Geist', sans-serif;
   font-weight: 300;
   font-style: normal;
 }
 
-/* Heading Styles - instrument-serif for instrument class */
 .hero-heading,
 .instrument,
 .instrument-heading {
@@ -30,34 +28,31 @@ body {
   white-space: nowrap;
 }
 
-/* Custom Border for input fields */
 input,
 textarea,
 select,
 button {
-  border: 1px solid #e5e7eb; /* Light gray border */
-  border-radius: 8px; /* Rounded corners */
-  padding: 0.5rem; /* Padding inside the input field */
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 0.5rem;
   font-family: 'Geist', sans-serif;
 }
 
-/* Focus styles for input fields */
 input:focus,
 textarea:focus,
 select:focus {
-  border-color: #4e5b84; /* Border color on focus */
+  border-color: #4e5b84;
   outline: none;
-  box-shadow: 0 0 0 2px rgba(78, 91, 132, 0.3); /* Slight glow effect */
+  box-shadow: 0 0 0 2px rgba(78, 91, 132, 0.3);
 }
 
-/* Custom utility for hiding scrollbars */
 @layer utilities {
   .no-scrollbar::-webkit-scrollbar {
     display: none;
   }
 
   .no-scrollbar {
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
 }

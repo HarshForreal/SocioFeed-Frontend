@@ -157,7 +157,6 @@ const EditProfileModal = ({ currentUser, onClose, onUpdate }) => {
               showUpdateIndicator={uploading}
             />
 
-            {/* Image Crop Upload Component */}
             <ImageCropUpload
               onImageReady={(blob) => {
                 if (blob instanceof Blob) {
@@ -191,7 +190,6 @@ const EditProfileModal = ({ currentUser, onClose, onUpdate }) => {
             )}
           </div>
 
-          {/* Username Field */}
           <InputField
             label="Username"
             value={formData.username}
@@ -201,7 +199,6 @@ const EditProfileModal = ({ currentUser, onClose, onUpdate }) => {
             className="px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
           />
 
-          {/* Bio Field */}
           <div className="space-y-2">
             <InputField
               label="Bio"

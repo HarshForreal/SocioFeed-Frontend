@@ -1,8 +1,7 @@
-// src/pages/Auth/ForgotPassword.jsx
 import { useState } from 'react';
 import InputField from '../../components/common/Input/InputField';
 import Button from '../../components/common/Button/Button';
-import Form from '../../components/common/Form/Form'; // Reuse the Form component
+import Form from '../../components/common/Form/Form';
 import { requestPasswordReset } from '../../api/auth';
 
 const ForgotPassword = () => {

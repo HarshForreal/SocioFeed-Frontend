@@ -1,4 +1,3 @@
-// src/components/common/StatusMessage.jsx
 import PropTypes from 'prop-types';
 
 const StatusMessage = ({ status, message }) => {

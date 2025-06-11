@@ -13,7 +13,6 @@ const PostUploadModal = ({ isOpen, onClose, onSubmit }) => {
   const [caption, setCaption] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Handle when images are ready from the crop component
   const handleImagesReady = (imageBlobs) => {
     if (Array.isArray(imageBlobs)) {
       setCroppedImages(imageBlobs);
@@ -24,21 +23,17 @@ const PostUploadModal = ({ isOpen, onClose, onSubmit }) => {
     }
   };
 
-  // Handle when images are removed
   const handleImageRemove = () => {
     setCroppedImages([]);
   };
 
-  // Check if we can submit
   const imagesArray = Array.isArray(croppedImages)
     ? croppedImages
     : croppedImages
       ? [croppedImages]
       : [];
   const canSubmit = imagesArray.length > 0 && caption.trim() && !isSubmitting;
-  // Handle the form submission
   const handleSubmit = async () => {
-    // Ensure croppedImages is an array
     const imagesArray = Array.isArray(croppedImages)
       ? croppedImages
       : croppedImages
@@ -55,38 +50,30 @@ const PostUploadModal = ({ isOpen, onClose, onSubmit }) => {
     if (isLoggedIn && user && token) {
       setIsSubmitting(true);
       try {
-        // Create FormData and append all cropped images
         const formData = new FormData();
         imagesArray.forEach((imageBlob, index) => {
           formData.append('images', imageBlob, `image-${index}.jpg`);
         });
 
-        // Send the file upload request
         const uploadResponse = await api.post('/post/upload', formData, {
           withCredentials: true,
         });
 
-        // Once the images are uploaded, proceed with creating the post
         const postData = {
           content: caption.trim(),
           imageUrls: uploadResponse.data.imageUrls,
         };
 
-        // Make direct API call to create post
         const postResponse = await api.post('/post/create', postData);
 
-        // Add the new post to Redux store
         dispatch(addPost(postResponse.data));
 
-        // Show success message
         toast.success('Post created successfully!');
 
-        // Clear form and close modal after successful post creation
         setCroppedImages([]);
         setCaption('');
         onClose();
 
-        // Optionally call onSubmit callback
         if (onSubmit) {
           onSubmit();
         }
@@ -105,7 +92,6 @@ const PostUploadModal = ({ isOpen, onClose, onSubmit }) => {
     }
   };
 
-  // Reset form when modal closes
   const handleClose = () => {
     setCroppedImages([]);
     setCaption('');
@@ -115,7 +101,6 @@ const PostUploadModal = ({ isOpen, onClose, onSubmit }) => {
   return (
     <Modal isOpen={isOpen} onClose={handleClose} title="Create Post" size="lg">
       <div className="p-6 space-y-6">
-        {/* Image Upload and Crop Section */}
         <div className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-3">
@@ -126,14 +111,13 @@ const PostUploadModal = ({ isOpen, onClose, onSubmit }) => {
               onImageRemove={handleImageRemove}
               multiple={true}
               maxImages={4}
-              aspectRatio={4 / 5} // Instagram-like aspect ratio for posts
+              aspectRatio={4 / 5}
               cropShape="rect"
               buttonText="Select Images (1-4)"
               className="border border-gray-200 rounded-lg p-4"
             />
           </div>
 
-          {/* Show selected images count */}
           {(Array.isArray(croppedImages)
             ? croppedImages
             : croppedImages
@@ -162,7 +146,6 @@ const PostUploadModal = ({ isOpen, onClose, onSubmit }) => {
           )}
         </div>
 
-        {/* Caption Section */}
         <div className="space-y-2">
           <label className="block text-sm font-medium text-gray-700">
             Caption *
@@ -182,7 +165,6 @@ const PostUploadModal = ({ isOpen, onClose, onSubmit }) => {
           </div>
         </div>
 
-        {/* Action Buttons */}
         <div className="flex justify-end gap-3 pt-4 border-t border-gray-200">
           <button
             className="px-6 py-2 text-sm font-medium rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 disabled:opacity-50 transition-colors"
@@ -211,7 +193,6 @@ const PostUploadModal = ({ isOpen, onClose, onSubmit }) => {
           </button>
         </div>
 
-        {/* Submission Status */}
         {isSubmitting && (
           <div className="text-center text-sm text-blue-600 bg-blue-50 p-3 rounded-lg">
             <p>📤 Uploading your images and creating post...</p>

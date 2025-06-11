@@ -34,7 +34,6 @@ export default function getCroppedImg(
           croppedAreaPixels.height
         );
 
-        // Compress using JPEG format and quality factor
         canvas.toBlob(
           (blob) => {
             if (!blob) {
@@ -44,7 +43,7 @@ export default function getCroppedImg(
             resolve(blob);
           },
           'image/jpeg',
-          quality // quality between 0 and 1
+          quality
         );
       } catch (err) {
         reject(new Error('Error while cropping the image: ' + err.message));

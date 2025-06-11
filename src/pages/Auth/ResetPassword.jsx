@@ -1,9 +1,8 @@
-// src/pages/Auth/ResetPassword.jsx
 import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import InputField from '../../components/common/Input/InputField';
 import Button from '../../components/common/Button/Button';
-import Form from '../../components/common/Form/Form'; // Reuse the Form component
+import Form from '../../components/common/Form/Form';
 import { resetPassword } from '../../api/auth';
 
 const ResetPassword = () => {
@@ -32,7 +31,6 @@ const ResetPassword = () => {
       const res = await resetPassword(token, formData);
       setMessage(res.data.message);
 
-      // Redirect to login after 3 seconds
       setTimeout(() => navigate('/login'), 3000);
     } catch (err) {
       setErrors({
@@ -48,7 +46,7 @@ const ResetPassword = () => {
       title="Reset Your Password"
       subtitle="Set a new password to access your account"
       onSubmit={handleSubmit}
-      error={errors.server} // Display error if it exists
+      error={errors.server}
       bottomText={
         <>
           Remember your password?{' '}

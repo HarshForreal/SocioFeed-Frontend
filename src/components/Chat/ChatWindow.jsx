@@ -1,11 +1,10 @@
 import { useState, useEffect } from 'react';
-import { fetchMessages, sendMessage } from '../../api/chat'; // Import API methods
+import { fetchMessages, sendMessage } from '../../api/chat';
 
 const ChatWindow = ({ userId, contactId }) => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
 
-  // Fetch messages when the component mounts or userId/contactId changes
   useEffect(() => {
     if (userId && contactId) {
       fetchMessages(userId, contactId)
@@ -14,9 +13,8 @@ const ChatWindow = ({ userId, contactId }) => {
     }
   }, [userId, contactId]);
 
-  // Handle sending a new message
   const handleSendMessage = () => {
-    if (newMessage.trim() === '') return; // Avoid empty messages
+    if (newMessage.trim() === '') return;
 
     const messageData = {
       content: newMessage,
@@ -26,9 +24,8 @@ const ChatWindow = ({ userId, contactId }) => {
 
     sendMessage(messageData)
       .then((response) => {
-        // Add the newly sent message to the messages list
         setMessages((prevMessages) => [...prevMessages, response.data]);
-        setNewMessage(''); // Clear input after sending
+        setNewMessage('');
       })
       .catch((error) => console.error('Error sending message:', error));
   };
@@ -39,7 +36,6 @@ const ChatWindow = ({ userId, contactId }) => {
         <h3 className="text-gray-800 font-semibold">Chat with {contactId}</h3>
       </div>
 
-      {/* Display messages */}
       <div className="flex-1 overflow-y-auto p-4">
         {messages.length === 0 ? (
           <div className="text-center text-gray-500">No messages yet.</div>
@@ -53,7 +49,6 @@ const ChatWindow = ({ userId, contactId }) => {
         )}
       </div>
 
-      {/* Message input area */}
       <div className="p-4 border-t bg-white">
         <input
           type="text"

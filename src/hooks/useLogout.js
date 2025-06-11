@@ -17,13 +17,13 @@ const useLogout = () => {
       await logoutUser();
       localStorage.removeItem('token');
       dispatch(clearAuth());
-      await dispatch(verifySession()); // force refresh auth state to logged out
+      await dispatch(verifySession());
 
-      console.log('🧹 Cleared auth state and token on logout');
+      console.log('Cleared auth state and token on logout');
       navigate('/login');
     } catch (err) {
       const msg = handleApiError(err, 'Logout failed, please try again.');
-      console.error('❌ Logout error:', msg);
+      console.error('Logout error:', msg);
     } finally {
       setLoading(false);
     }

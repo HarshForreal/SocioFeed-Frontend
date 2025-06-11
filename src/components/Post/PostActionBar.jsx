@@ -1,4 +1,3 @@
-// components/Post/PostActionBar.jsx
 const PostActionBar = ({
   isLiked,
   likesCount,

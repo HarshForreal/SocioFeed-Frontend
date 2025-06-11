@@ -1,4 +1,3 @@
-// src/components/Profile/FollowersFollowingModal.jsx
 import PropTypes from 'prop-types';
 import Modal from '../../common/Modal/Modal';
 const FollowersFollowingModal = ({

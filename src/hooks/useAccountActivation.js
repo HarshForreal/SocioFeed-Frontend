@@ -1,6 +1,5 @@
-// src/hooks/useAccountActivation.js
 import { useState, useEffect } from 'react';
-import { activateAccount } from '../api/auth'; // Reusing the existing API function
+import { activateAccount } from '../api/auth';
 
 const useAccountActivation = (token) => {
   const [status, setStatus] = useState('loading');
@@ -8,7 +7,7 @@ const useAccountActivation = (token) => {
   useEffect(() => {
     const verifyAccount = async () => {
       try {
-        const res = await activateAccount(token); // Using the existing activateAccount API function
+        const res = await activateAccount(token);
         console.log(res.message);
         setStatus('success');
       } catch (err) {

@@ -1,4 +1,3 @@
-// src/routes/routesConfig.js
 import Landing from '../pages/Home/Landing';
 import Login from '../pages/Auth/Login';
 import Signup from '../pages/Auth/Signup';

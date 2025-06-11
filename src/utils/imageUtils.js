@@ -1,4 +1,3 @@
-// utils/imageUtils.js
 export const generateOptimizedImageUrl = (imageUrl) => {
   const url = typeof imageUrl === 'string' ? imageUrl : imageUrl?.url;
   if (!url) return '';

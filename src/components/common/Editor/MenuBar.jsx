@@ -4,10 +4,6 @@ import {
   AlignLeft,
   AlignRight,
   Bold,
-  CodeSquare,
-  Heading1,
-  Heading2,
-  Heading3,
   Highlighter,
   Italic,
   List,
@@ -22,21 +18,6 @@ const MenuBar = ({ editor }) => {
   if (!editor) return null;
 
   const options = [
-    // {
-    //   icon: <Heading1 size={16} />,
-    //   onClick: () => editor.chain().focus().toggleHeading({ level: 1 }).run(),
-    //   pressed: editor.isActive('heading', { level: 1 }),
-    // },
-    // {
-    //   icon: <Heading2 size={16} />,
-    //   onClick: () => editor.chain().focus().toggleHeading({ level: 2 }).run(),
-    //   pressed: editor.isActive('heading', { level: 2 }),
-    // },
-    // {
-    //   icon: <Heading3 size={16} />,
-    //   onClick: () => editor.chain().focus().toggleHeading({ level: 3 }).run(),
-    //   pressed: editor.isActive('heading', { level: 3 }),
-    // },
     {
       icon: <Bold size={16} />,
       onClick: () => editor.chain().focus().toggleBold().run(),

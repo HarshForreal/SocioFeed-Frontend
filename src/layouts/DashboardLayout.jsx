@@ -6,7 +6,7 @@ import { Outlet } from 'react-router-dom';
 
 const DashboardLayout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [showChatSidebar, setShowChatSidebar] = useState(false); // <-- added
+  const [showChatSidebar, setShowChatSidebar] = useState(false);
 
   const handleSwitchToChat = () => {
     setShowChatSidebar(true);

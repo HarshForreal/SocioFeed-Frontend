@@ -11,7 +11,6 @@ export const useLikePost = (
   const [isLiked, setIsLiked] = useState(false);
   const [isLiking, setIsLiking] = useState(false);
 
-  // ✅ Set isLiked based on the initial likes array
   useEffect(() => {
     if (likes && Array.isArray(likes)) {
       setIsLiked(likes.some((like) => like.userId === userId));
@@ -33,7 +32,6 @@ export const useLikePost = (
         setLikesCount(data.likesCount);
         setIsLiked((prev) => !prev);
       } else {
-        // fallback
         setLikesCount((prev) => (isLiked ? prev - 1 : prev + 1));
         setIsLiked((prev) => !prev);
       }

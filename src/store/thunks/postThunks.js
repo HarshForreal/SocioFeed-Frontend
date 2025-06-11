@@ -1,4 +1,3 @@
-// store/thunks/postsThunks.js
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import api from '../../api/client';
 
@@ -22,7 +21,6 @@ export const uploadAndCreatePost = createAsyncThunk(
   'posts/uploadAndCreatePost',
   async ({ image, caption }, thunkAPI) => {
     try {
-      // Step 1: Upload image
       const formData = new FormData();
       formData.append('file', image);
 
@@ -32,7 +30,6 @@ export const uploadAndCreatePost = createAsyncThunk(
         },
       });
 
-      // Step 2: Create post
       const postData = {
         content: caption,
         imageUrls: uploadResponse.data.imageUrls,

@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect } from 'react';
 import { toast } from 'react-toastify';
-import { searchUsers, followUser, unfollowUser } from '../api/user'; // ✅ Ensure this is the correct path
+import { searchUsers, followUser, unfollowUser } from '../api/user';
 
 const useUserSearch = () => {
   const [query, setQuery] = useState('');
@@ -19,7 +19,6 @@ const useUserSearch = () => {
       const fetchedUsers = res.data.users;
       setUsers(fetchedUsers);
 
-      // build following set based on API response
       const followed = new Set(
         fetchedUsers.filter((user) => user.isFollowing).map((user) => user.id)
       );
@@ -32,7 +31,6 @@ const useUserSearch = () => {
     }
   }, []);
 
-  // ✅ Same debounce logic as before
   useEffect(() => {
     const handler = setTimeout(() => {
       fetchUsers(query);

@@ -8,7 +8,6 @@ const SidebarProfile = ({ name, profileImage, followers, following }) => (
     <div className="flex flex-col">
       <span className="text-sm font-medium text-gray-900">{name}</span>
 
-      {/* FIXED: Flex row for proper layout and spacing */}
       <div className="flex items-center gap-1 text-xs text-gray-600 whitespace-nowrap">
         <span>
           <strong>{followers}</strong> Followers

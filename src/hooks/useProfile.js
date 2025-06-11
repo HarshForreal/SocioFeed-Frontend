@@ -1,4 +1,3 @@
-// src/hooks/useProfile.js
 import { useState, useEffect } from 'react';
 import { getUserProfile } from '../api/user';
 

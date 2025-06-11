@@ -25,7 +25,7 @@ const ChatSidebar = ({ onBack }) => {
       ) : (
         followingList.map((user) => (
           <Link
-            to={`/chat/${user.username}`}
+            to={`/chat/${user.id}`}
             key={user.id}
             className={`flex items-center gap-3 p-2 rounded-lg cursor-pointer mb-2
               ${userId === user.id ? 'bg-gray-200' : 'hover:bg-gray-100'}`}

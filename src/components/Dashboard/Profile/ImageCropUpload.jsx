@@ -1,4 +1,3 @@
-// components/ImageCropUpload.jsx
 import React, { useRef, useState } from 'react';
 import Cropper from 'react-easy-crop';
 import getCroppedImg from '../../../utils/cropImage';
@@ -74,7 +73,6 @@ const ImageCropUpload = ({
     }
   };
 
-  // New function to handle cropping and saving current image
   const cropAndSave = async () => {
     await cropCurrentImage();
   };
@@ -104,11 +102,8 @@ const ImageCropUpload = ({
     onImageRemove();
   };
 
-  // Check if current image is the first one
   const isFirstImage = currentCropIndex === 0;
-  // Check if current image is the last one
   const isLastImage = currentCropIndex === imageSrcs.length - 1;
-  // Check if there's only one image
   const isSingleImage = imageSrcs.length === 1;
 
   return (
@@ -152,9 +147,7 @@ const ImageCropUpload = ({
               {currentCropIndex + 1} / {imageSrcs.length}
             </span>
 
-            {/* Show different buttons based on the situation */}
             {isSingleImage ? (
-              // If there's only one image, show a "Crop & Save" button
               <button
                 type="button"
                 onClick={cropAndSave}
@@ -163,7 +156,6 @@ const ImageCropUpload = ({
                 Crop & Save
               </button>
             ) : isLastImage ? (
-              // If it's the last image, show "Crop & Finish" button
               <button
                 type="button"
                 onClick={cropAndSave}
@@ -172,7 +164,6 @@ const ImageCropUpload = ({
                 Crop & Finish
               </button>
             ) : (
-              // Otherwise show the regular Next button
               <button
                 type="button"
                 onClick={goToNext}

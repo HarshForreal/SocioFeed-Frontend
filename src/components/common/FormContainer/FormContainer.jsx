@@ -1,4 +1,3 @@
-// components/common/FormContainer.jsx
 const FormContainer = ({ children, title, subtitle, bottomText }) => (
   <div className="min-h-screen flex flex-col items-center justify-center bg-white px-4">
     <div className="text-center mb-6">

@@ -6,7 +6,7 @@ const userEndpoints = {
   FOLLOW: (userId) => `/user/follow/${userId}`,
   UNFOLLOW: (userId) => `/user/unfollow/${userId}`,
   GET_FOLLOWING: '/user/following',
-  GET_FOLLOWERS: '/user/followers', // New endpoint to get followers
+  GET_FOLLOWERS: '/user/followers',
 };
 
 export default userEndpoints;
