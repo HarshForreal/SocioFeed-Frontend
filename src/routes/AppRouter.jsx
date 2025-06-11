@@ -1,55 +1,27 @@
+// src/routes/AppRouter.js
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
+import useAuthSession from '../hooks/useAuthSession';
 
-import Landing from '../pages/Home/Landing';
-import Login from '../pages/Auth/Login';
-import Signup from '../pages/Auth/Signup';
-import Activate from '../pages/Auth/Activate';
-import ActivatePrompt from '../pages/Auth/ActivatePrompt';
-import ForgotPassword from '../pages/Auth/ForgotPassword';
-import ResetPassword from '../pages/Auth/ResetPassword';
+import { publicRoutes, protectedRoutes } from '../config/routesConfig';
 
-import ScrollPage from '../pages/Dashboard/ScrollPage';
-import SearchPage from '../pages/Dashboard/SearchPage';
-import BookmarkPage from '../pages/Dashboard/BookmarkPage';
-import ProfilePage from '../pages/Dashboard/ProfilePage';
-import ChatPage from '../pages/Dashboard/ChatPage';
-
-import DashboardLayout from '../layouts/DashboardLayout';
 import PrivateRoute from '../components/Route/PrivateRoute';
+import DashboardLayout from '../layouts/DashboardLayout';
 
-import { verifySession } from '../store/thunks/authThunks';
-import { fetchUserProfile } from '../store/thunks/userThunks';
 const AppRouter = () => {
-  const dispatch = useDispatch();
   const authUser = useSelector((state) => state.auth.user);
 
-  useEffect(() => {
-    dispatch(verifySession());
-  }, [dispatch]);
-
-  useEffect(() => {
-    // Fetch user profile only when auth user is available
-    if (authUser?.username) {
-      dispatch(fetchUserProfile(authUser.username));
-    }
-  }, [authUser?.username, dispatch]);
+  useAuthSession(authUser);
 
   return (
     <Router>
       <Routes>
-        {/* Public Routes */}
-        <Route path="/" element={<Landing />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/activate/:token" element={<Activate />} />
-        <Route path="/activate" element={<ActivatePrompt />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/reset-password/:token" element={<ResetPassword />} />
+        {/* public routes */}
+        {publicRoutes.map(({ path, element }) => (
+          <Route key={path} path={path} element={element} />
+        ))}
 
-        {/* Protected Routes inside layout */}
+        {/* protected routes */}
         <Route
           path="/"
           element={
@@ -58,13 +30,9 @@ const AppRouter = () => {
             </PrivateRoute>
           }
         >
-          <Route path="dashboard" element={<ScrollPage />} />
-          <Route path="search" element={<SearchPage />} />
-          <Route path="bookmarks" element={<BookmarkPage />} />
-          {/* <Route path="profile" element={<ProfilePage />} /> */}
-          <Route path="profile/:username" element={<ProfilePage />} />
-
-          <Route path="chat/*" element={<ChatPage />} />
+          {protectedRoutes.map(({ path, element }) => (
+            <Route key={path} path={path} element={element} />
+          ))}
         </Route>
       </Routes>
     </Router>

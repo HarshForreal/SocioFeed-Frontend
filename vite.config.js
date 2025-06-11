@@ -5,4 +5,8 @@ import tailwindcss from '@tailwindcss/vite';
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), tailwindcss()],
+  // just to run on mobile devices using ip address
+  server: {
+    host: true,
+  },
 });

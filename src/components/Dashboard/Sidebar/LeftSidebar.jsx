@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import SidebarHeader from './SidebarHeader';
@@ -7,20 +7,40 @@ import SidebarProfile from './SidebarProfile';
 import LogoutButton from './LogoutButton';
 import EditProfileModal from '../Profile/EditProfileModal';
 import { setUser } from '../../../store/slices/authSlice';
+import { getUserProfile } from '../../../api/user';
 import ChatSidebar from '../../Chat/ChatSidebar';
 
 const LeftSidebar = ({ isOpen, onClose }) => {
   const dispatch = useDispatch();
   const loggedInUser = useSelector((state) => state.auth.user);
-  console.log('Logged in User', loggedInUser);
+
+  // Use local state for logged-in user's profile to prevent interference
+  const [loggedInUserProfile, setLoggedInUserProfile] = useState(null);
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [showChatSidebar, setShowChatSidebar] = useState(false);
+
+  // Fetch logged-in user's profile separately
+  useEffect(() => {
+    if (loggedInUser?.username) {
+      getUserProfile(loggedInUser.username)
+        .then((res) => {
+          setLoggedInUserProfile(res.data);
+        })
+        .catch((error) => {
+          console.error('Failed to fetch logged-in user profile:', error);
+          // Fallback to using loggedInUser data if profile fetch fails
+          setLoggedInUserProfile(loggedInUser);
+        });
+    }
+  }, [loggedInUser]);
 
   const openEdit = () => setIsEditOpen(true);
   const closeEdit = () => setIsEditOpen(false);
 
   const handleProfileUpdate = (updatedUser) => {
     dispatch(setUser(updatedUser));
+    // Update local profile state as well
+    setLoggedInUserProfile(updatedUser);
   };
 
   return (
@@ -71,18 +91,21 @@ const LeftSidebar = ({ isOpen, onClose }) => {
           />
         )}
 
-        {/* Always show SidebarProfile if available */}
-        {loggedInUser && (
+        {/* Show SidebarProfile only when both loggedInUser and loggedInUserProfile are loaded */}
+        {loggedInUser && loggedInUserProfile && (
           <div className="mt-auto border-t border-gray-100 p-4">
             <Link
               to={`/profile/${loggedInUser.username}`}
               className="block hover:bg-gray-50 rounded-lg p-2 transition-colors duration-200"
             >
               <SidebarProfile
-                name={loggedInUser.username}
-                profileImage={loggedInUser.avatarUrl}
-                followers={loggedInUser.followerCount}
-                following={loggedInUser.followingCount}
+                name={loggedInUserProfile.username}
+                profileImage={loggedInUserProfile.avatarUrl}
+                followers={
+                  loggedInUserProfile.followerCount ||
+                  loggedInUserProfile.followersCount
+                }
+                following={loggedInUserProfile.followingCount}
               />
             </Link>
 

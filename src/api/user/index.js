@@ -19,3 +19,8 @@ export const followUser = (userId) =>
 
 export const unfollowUser = (userId) =>
   api.post(apiEndpoints.user.UNFOLLOW(userId));
+
+export const fetchFollowingList = () =>
+  api
+    .get(apiEndpoints.user.GET_FOLLOWING)
+    .then((res) => res.data.following || []);

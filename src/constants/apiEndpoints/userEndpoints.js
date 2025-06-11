@@ -5,6 +5,7 @@ const userEndpoints = {
   SEARCH: '/user/search',
   FOLLOW: (userId) => `/user/follow/${userId}`,
   UNFOLLOW: (userId) => `/user/unfollow/${userId}`,
+  GET_FOLLOWING: '/user/following',
 };
 
 export default userEndpoints;
