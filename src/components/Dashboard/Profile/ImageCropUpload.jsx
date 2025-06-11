@@ -67,10 +67,16 @@ const ImageCropUpload = ({
       updated[currentCropIndex] = blob;
       setCroppedImages(updated);
       console.log('Cropped image blob:', blob);
-      onImageReady(updated.filter(Boolean));
+      // onImageReady(updated.filter(Boolean));
+      onImageReady(updated[currentCropIndex]);
     } catch (err) {
       console.error('Crop error:', err);
     }
+  };
+
+  // New function to handle cropping and saving current image
+  const cropAndSave = async () => {
+    await cropCurrentImage();
   };
 
   const goToNext = async () => {
@@ -97,6 +103,13 @@ const ImageCropUpload = ({
     setCurrentCropIndex(0);
     onImageRemove();
   };
+
+  // Check if current image is the first one
+  const isFirstImage = currentCropIndex === 0;
+  // Check if current image is the last one
+  const isLastImage = currentCropIndex === imageSrcs.length - 1;
+  // Check if there's only one image
+  const isSingleImage = imageSrcs.length === 1;
 
   return (
     <div className={className}>
@@ -129,22 +142,46 @@ const ImageCropUpload = ({
             <button
               type="button"
               onClick={goToPrev}
-              disabled={currentCropIndex === 0}
+              disabled={isFirstImage}
               className="text-sm text-blue-600 disabled:text-gray-400"
             >
               ◀ Prev
             </button>
+
             <span className="text-sm text-gray-600">
               {currentCropIndex + 1} / {imageSrcs.length}
             </span>
-            <button
-              type="button"
-              onClick={goToNext}
-              disabled={currentCropIndex === imageSrcs.length - 1}
-              className="text-sm text-blue-600 disabled:text-gray-400"
-            >
-              Next ▶
-            </button>
+
+            {/* Show different buttons based on the situation */}
+            {isSingleImage ? (
+              // If there's only one image, show a "Crop & Save" button
+              <button
+                type="button"
+                onClick={cropAndSave}
+                className="text-sm bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700"
+              >
+                Crop & Save
+              </button>
+            ) : isLastImage ? (
+              // If it's the last image, show "Crop & Finish" button
+              <button
+                type="button"
+                onClick={cropAndSave}
+                className="text-sm bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700"
+              >
+                Crop & Finish
+              </button>
+            ) : (
+              // Otherwise show the regular Next button
+              <button
+                type="button"
+                onClick={goToNext}
+                className="text-sm text-blue-600"
+              >
+                Next ▶
+              </button>
+            )}
+
             <button
               type="button"
               onClick={handleRemoveAll}

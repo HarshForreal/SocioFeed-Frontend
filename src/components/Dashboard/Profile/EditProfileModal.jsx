@@ -160,9 +160,20 @@ const EditProfileModal = ({ currentUser, onClose, onUpdate }) => {
             {/* Image Crop Upload Component */}
             <ImageCropUpload
               onImageReady={(blob) => {
-                console.log('[ImageCropUpload] Cropped blob ready');
-                setCroppedAvatarBlob(blob);
-                setAvatarUrl(URL.createObjectURL(blob));
+                if (blob instanceof Blob) {
+                  console.log('[ImageCropUpload] Cropped blob ready');
+                  setCroppedAvatarBlob(blob);
+                  const objectURL = URL.createObjectURL(blob);
+                  setAvatarUrl(objectURL);
+                } else {
+                  console.error(
+                    '[ImageCropUpload] Invalid blob received:',
+                    blob
+                  );
+                  toast.error(
+                    'Something went wrong while processing the image.'
+                  );
+                }
               }}
               onImageRemove={() => {
                 console.log('[ImageCropUpload] Image removed');

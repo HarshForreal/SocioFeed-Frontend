@@ -1,7 +1,8 @@
+// src/pages/Auth/ForgotPassword.jsx
 import { useState } from 'react';
 import InputField from '../../components/common/Input/InputField';
 import Button from '../../components/common/Button/Button';
-import FormContainer from '../../components/common/FormContainer/FormContainer';
+import Form from '../../components/common/Form/Form'; // Reuse the Form component
 import { requestPasswordReset } from '../../api/auth';
 
 const ForgotPassword = () => {
@@ -27,41 +28,49 @@ const ForgotPassword = () => {
   };
 
   return (
-    <FormContainer
+    <Form
       title="Reset Your Password"
       subtitle="We’ll send a password reset link to your email."
+      onSubmit={handleSubmit}
+      error={error}
+      bottomText={
+        <>
+          Remembered your password?{' '}
+          <a
+            href="/login"
+            className="text-[#4e5b84] font-semibold hover:underline"
+          >
+            Log in
+          </a>
+        </>
+      }
     >
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white w-full max-w-md rounded-2xl shadow-md px-6 py-8 border border-gray-300"
-      >
-        <InputField
-          label="Email"
-          type="email"
-          name="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="Enter your email"
-          error={error}
-        />
+      <InputField
+        label="Email"
+        type="email"
+        name="email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        placeholder="Enter your email"
+        error={error}
+      />
 
-        {message && (
-          <p className="text-green-600 text-sm mt-2 text-center">{message}</p>
-        )}
+      {message && (
+        <p className="text-green-600 text-sm mt-2 text-center">{message}</p>
+      )}
 
-        {error && (
-          <p className="text-red-500 text-sm text-center mt-2">{error}</p>
-        )}
+      {error && (
+        <p className="text-red-500 text-sm text-center mt-2">{error}</p>
+      )}
 
-        <Button
-          type="submit"
-          text={loading ? 'Sending...' : 'Send Reset Link'}
-          color="bg-[#0d1128]"
-          className="w-full font-semibold mt-2"
-          textColor="text-white"
-        />
-      </form>
-    </FormContainer>
+      <Button
+        type="submit"
+        text={loading ? 'Sending...' : 'Send Reset Link'}
+        color="bg-[#0d1128]"
+        className="w-full font-semibold mt-2"
+        textColor="text-white"
+      />
+    </Form>
   );
 };
 

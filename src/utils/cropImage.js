@@ -1,5 +1,18 @@
-export default function getCroppedImg(imageSrc, croppedAreaPixels) {
+export default function getCroppedImg(
+  imageSrc,
+  croppedAreaPixels,
+  quality = 0.7
+) {
   return new Promise((resolve, reject) => {
+    if (
+      !croppedAreaPixels ||
+      !croppedAreaPixels.width ||
+      !croppedAreaPixels.height
+    ) {
+      reject(new Error('Invalid cropped area dimensions'));
+      return;
+    }
+
     const image = new Image();
 
     image.onload = () => {
@@ -21,15 +34,20 @@ export default function getCroppedImg(imageSrc, croppedAreaPixels) {
           croppedAreaPixels.height
         );
 
-        canvas.toBlob((blob) => {
-          if (!blob) {
-            reject(new Error('Canvas is empty'));
-            return;
-          }
-          resolve(blob);
-        }, 'image/jpeg');
+        // Compress using JPEG format and quality factor
+        canvas.toBlob(
+          (blob) => {
+            if (!blob) {
+              reject(new Error('Canvas is empty'));
+              return;
+            }
+            resolve(blob);
+          },
+          'image/jpeg',
+          quality // quality between 0 and 1
+        );
       } catch (err) {
-        reject(new Error('DrawImage error: ' + err.message));
+        reject(new Error('Error while cropping the image: ' + err.message));
       }
     };
 
@@ -38,13 +56,14 @@ export default function getCroppedImg(imageSrc, croppedAreaPixels) {
     };
 
     if (
-      imageSrc &&
-      typeof imageSrc === 'string' &&
-      imageSrc.startsWith('data:image/')
+      !imageSrc ||
+      typeof imageSrc !== 'string' ||
+      !imageSrc.startsWith('data:image/')
     ) {
-      image.src = imageSrc;
-    } else {
-      reject(new Error('Invalid image source: ' + imageSrc));
+      reject(new Error('Invalid image source, expected a base64 string'));
+      return;
     }
+
+    image.src = imageSrc;
   });
 }

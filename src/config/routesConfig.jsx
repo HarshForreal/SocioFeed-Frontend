@@ -1,4 +1,16 @@
 // src/routes/routesConfig.js
+import Landing from '../pages/Home/Landing';
+import Login from '../pages/Auth/Login';
+import Signup from '../pages/Auth/Signup';
+import Activate from '../pages/Auth/Activate';
+import ActivatePrompt from '../pages/Auth/ActivatePrompt';
+import ForgotPassword from '../pages/Auth/ForgotPassword';
+import ResetPassword from '../pages/Auth/ResetPassword';
+import ScrollPage from '../pages/Dashboard/ScrollPage';
+import ChatPage from '../pages/Dashboard/ChatPage';
+import SearchPage from '../pages/Dashboard/SearchPage';
+import BookmarkPage from '../pages/Dashboard/BookmarkPage';
+import ProfilePage from '../pages/Dashboard/ProfilePage';
 
 export const publicRoutes = [
   { path: '/', element: <Landing /> },

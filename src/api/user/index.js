@@ -1,4 +1,5 @@
 // src/api/user/index.js
+
 import api from '../client';
 import { apiEndpoints } from '../../constants/apiEndpoints';
 
@@ -20,6 +21,13 @@ export const followUser = (userId) =>
 export const unfollowUser = (userId) =>
   api.post(apiEndpoints.user.UNFOLLOW(userId));
 
+// New function to fetch followers
+export const fetchFollowersList = () =>
+  api
+    .get(apiEndpoints.user.GET_FOLLOWERS)
+    .then((res) => res.data.followers || []);
+
+// New function to fetch following list
 export const fetchFollowingList = () =>
   api
     .get(apiEndpoints.user.GET_FOLLOWING)

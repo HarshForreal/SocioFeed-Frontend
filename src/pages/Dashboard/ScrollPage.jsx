@@ -85,6 +85,7 @@ const ScrollPage = () => {
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
       {posts.length === 0 && !loading && <p>No posts to display.</p>}
+      <h1 className="text-2xl mb-4 instrument">Scroll Through.</h1>
 
       {posts.map((post) => (
         <Post key={post.id} post={post} />

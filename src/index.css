@@ -3,38 +3,59 @@
 html {
   scroll-behavior: smooth;
 }
-.hero-heading {
-  font-family: 'instrument-serif', sans-serif;
-  font-weight: 400;
-  font-style: italic;
-  font-size: 16px;
-  line-height: 24px;
-}
 
-.instrument {
-  font-family: 'instrument-serif', sans-serif;
-  font-style: italic;
-}
-
-.instrument-heading {
-  font-family: 'instrument-serif', sans-serif;
-  font-style: normal;
-  white-space: nowrap;
-}
-
-.geist {
+/* Body or general font settings */
+body {
   font-family: 'Geist', sans-serif;
-  font-optical-sizing: auto;
   font-weight: 300;
   font-style: normal;
 }
 
+/* Heading Styles - instrument-serif for instrument class */
+.hero-heading,
+.instrument,
+.instrument-heading {
+  font-family: 'instrument-serif', sans-serif;
+  font-style: italic;
+}
+
+.hero-heading {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.instrument-heading {
+  font-style: normal;
+  white-space: nowrap;
+}
+
+/* Custom Border for input fields */
+input,
+textarea,
+select,
+button {
+  border: 1px solid #e5e7eb; /* Light gray border */
+  border-radius: 8px; /* Rounded corners */
+  padding: 0.5rem; /* Padding inside the input field */
+  font-family: 'Geist', sans-serif;
+}
+
+/* Focus styles for input fields */
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: #4e5b84; /* Border color on focus */
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(78, 91, 132, 0.3); /* Slight glow effect */
+}
+
+/* Custom utility for hiding scrollbars */
 @layer utilities {
-  /* Hide scrollbar for Chrome, Safari and Opera */
   .no-scrollbar::-webkit-scrollbar {
     display: none;
   }
-  /* Hide scrollbar for IE, Edge and Firefox */
+
   .no-scrollbar {
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */

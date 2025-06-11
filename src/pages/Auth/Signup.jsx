@@ -5,7 +5,7 @@ import InputField from '../../components/common/Input/InputField';
 import Button from '../../components/common/Button/Button';
 import useSignup from '../../hooks/useSignup';
 import AvatarGroup from '../../components/common/AvatarGroup/AvatarGroup';
-import Form from '../../components/common/Form/Form'; // ⬅️ your new reusable Form
+import Form from '../../components/common/Form/Form';
 
 const Signup = () => {
   const { signup, loading, errors: apiErrors } = useSignup();

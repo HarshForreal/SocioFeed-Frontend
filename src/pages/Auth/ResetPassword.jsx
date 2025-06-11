@@ -1,8 +1,9 @@
+// src/pages/Auth/ResetPassword.jsx
 import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import InputField from '../../components/common/Input/InputField';
 import Button from '../../components/common/Button/Button';
-import FormContainer from '../../components/common/FormContainer/FormContainer';
+import Form from '../../components/common/Form/Form'; // Reuse the Form component
 import { resetPassword } from '../../api/auth';
 
 const ResetPassword = () => {
@@ -43,51 +44,54 @@ const ResetPassword = () => {
   };
 
   return (
-    <FormContainer
+    <Form
       title="Reset Your Password"
       subtitle="Set a new password to access your account"
+      onSubmit={handleSubmit}
+      error={errors.server} // Display error if it exists
+      bottomText={
+        <>
+          Remember your password?{' '}
+          <a
+            href="/login"
+            className="text-[#4e5b84] font-semibold hover:underline"
+          >
+            Log in
+          </a>
+        </>
+      }
     >
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white w-full max-w-md rounded-2xl shadow-md px-6 py-8 border border-gray-300"
-      >
-        <InputField
-          label="New Password"
-          type="password"
-          name="newPassword"
-          value={formData.newPassword}
-          onChange={handleChange}
-          placeholder="Enter new password"
-          error={errors.newPassword}
-        />
-        <InputField
-          label="Confirm New Password"
-          type="password"
-          name="confirmNewPassword"
-          value={formData.confirmNewPassword}
-          onChange={handleChange}
-          placeholder="Confirm new password"
-          error={errors.confirmNewPassword}
-        />
+      <InputField
+        label="New Password"
+        type="password"
+        name="newPassword"
+        value={formData.newPassword}
+        onChange={handleChange}
+        placeholder="Enter new password"
+        error={errors.newPassword}
+      />
+      <InputField
+        label="Confirm New Password"
+        type="password"
+        name="confirmNewPassword"
+        value={formData.confirmNewPassword}
+        onChange={handleChange}
+        placeholder="Confirm new password"
+        error={errors.confirmNewPassword}
+      />
 
-        {errors.server && (
-          <p className="text-red-500 text-sm text-center mt-2">
-            {errors.server}
-          </p>
-        )}
-        {message && (
-          <p className="text-green-600 text-sm text-center mt-2">{message}</p>
-        )}
+      {message && (
+        <p className="text-green-600 text-sm text-center mt-2">{message}</p>
+      )}
 
-        <Button
-          type="submit"
-          text={loading ? 'Resetting...' : 'Reset Password'}
-          color="bg-[#0d1128]"
-          className="w-full font-semibold mt-2"
-          textColor="text-white"
-        />
-      </form>
-    </FormContainer>
+      <Button
+        type="submit"
+        text={loading ? 'Resetting...' : 'Reset Password'}
+        color="bg-[#0d1128]"
+        className="w-full font-semibold mt-2"
+        textColor="text-white"
+      />
+    </Form>
   );
 };
 

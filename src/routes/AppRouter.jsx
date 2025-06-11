@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import useAuthSession from '../hooks/useAuthSession';
 
-import { publicRoutes, protectedRoutes } from '../config/routesConfig';
+import { publicRoutes, protectedRoutes } from '../config/routesConfig.jsx';
 
 import PrivateRoute from '../components/Route/PrivateRoute';
 import DashboardLayout from '../layouts/DashboardLayout';

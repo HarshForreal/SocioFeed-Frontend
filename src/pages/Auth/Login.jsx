@@ -86,8 +86,9 @@
 
 // export default Login;
 
-import { useState, useEffect } from 'react';
-import { Navigate } from 'react-router-dom'; // Import Navigate to redirect
+// src/pages/Auth/Login.jsx
+import { useState } from 'react';
+import { Navigate } from 'react-router-dom';
 import InputField from '../../components/common/Input/InputField';
 import Button from '../../components/common/Button/Button';
 import Form from '../../components/common/Form/Form';
@@ -104,12 +105,10 @@ const Login = () => {
   const { login, loading, errors } = useLogin();
   const { isLoggedIn } = useSelector((state) => state.auth); // Access login status from Redux state
 
-  useEffect(() => {
-    // If user is already logged in, redirect them to the dashboard or any other page
-    if (isLoggedIn) {
-      <Navigate to="/dashboard" replace />;
-    }
-  }, [isLoggedIn]);
+  // Redirect if already logged in
+  if (isLoggedIn) {
+    return <Navigate to="/dashboard" replace />;
+  }
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -120,16 +119,12 @@ const Login = () => {
     await login(formData);
   };
 
-  // If already logged in, don't render the login form, just redirect
-  if (isLoggedIn) {
-    return <Navigate to="/dashboard" replace />;
-  }
-
   return (
     <Form
       title="Login to your account."
       subtitle="Welcome back!"
       onSubmit={handleSubmit}
+      error={errors.server} // Display error if it exists
       bottomText={
         <>
           Don’t have a Sociofeed profile?{' '}
@@ -149,7 +144,7 @@ const Login = () => {
         value={formData.email}
         onChange={handleChange}
         placeholder="Enter your email or username"
-        error={errors.email}
+        error={errors.email} // Pass error from useLogin hook
       />
       <InputField
         label="Password"
@@ -158,11 +153,11 @@ const Login = () => {
         value={formData.password}
         onChange={handleChange}
         placeholder="Enter your password"
-        error={errors.password}
+        error={errors.password} // Pass error from useLogin hook
         addonRight={<ArrowRight className="text-gray-400 w-5 h-5" />}
       />
 
-      {/* Forgot Password */}
+      {/* Forgot Password link */}
       <div className="text-right mb-4 mt-[-8px]">
         <a
           href="/forgot-password"
@@ -171,11 +166,6 @@ const Login = () => {
           Forgot Password?
         </a>
       </div>
-
-      {/* Server Error */}
-      {errors.server && (
-        <p className="text-red-500 text-sm text-center mt-2">{errors.server}</p>
-      )}
 
       <Button
         type="submit"

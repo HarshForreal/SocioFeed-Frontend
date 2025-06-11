@@ -4,6 +4,7 @@ import {
   fetchUserPosts,
   uploadAndCreatePost,
 } from '../../store/thunks/postThunks';
+import { followUser, unfollowUser } from '../thunks/userThunks';
 
 const postsSlice = createSlice({
   name: 'posts',
@@ -54,6 +55,10 @@ const postsSlice = createSlice({
       .addCase(uploadAndCreatePost.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+      .addCase(unfollowUser.fulfilled, (state) => {
+        // Clear posts when user unfollows someone
+        state.posts = [];
       });
   },
 });

@@ -1,4 +1,5 @@
 const ProfileHeader = ({ user, onFollowersClick, onFollowingClick }) => {
+  console.log('User', user);
   if (!user) return <div className="text-center p-4">Loading profile...</div>;
 
   return (
